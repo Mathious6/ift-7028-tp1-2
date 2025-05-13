@@ -1,0 +1,3 @@
+"""
+Simulation core components.
+"""

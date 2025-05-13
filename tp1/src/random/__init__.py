@@ -1,0 +1,3 @@
+"""
+Random number generation components.
+"""
