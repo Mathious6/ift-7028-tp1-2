@@ -1,11 +1,18 @@
 from dataclasses import dataclass
+import random
+import time
 from typing import Optional
+
+from config.simulation import SimulationConfig
 
 
 @dataclass
 class Airplane:
     """Represents an airplane in the simulation."""
-    id: int
-    arrival_time: float
-    service_start_time: Optional[float] = None
-    service_end_time: Optional[float] = None
+
+    def __init__(self):
+        self.id = random.randint(100000000, 999999999)
+
+    def discharge(self, time_to_wait: float) -> None:
+        """Records the time when the airplane is discharged."""
+        time.sleep(time_to_wait)
