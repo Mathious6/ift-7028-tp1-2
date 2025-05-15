@@ -9,10 +9,10 @@ from src.models.airplane import Airplane
 
 class Airport:
 
-    def __init__(self, robots_number: int):
-        self.config: SimulationConfig = SimulationConfig()
-        self.id = random.randint(100000000, 999999999)
-        self.robots_number = robots_number
+    def __init__(self, config: SimulationConfig):
+        self.config: SimulationConfig = config
+
+        self.robots_number = self.config.NUMBER_OF_ROBOTS
         self.airplanes_waiting_queue = Queue()
 
     def _add_airplane(self):

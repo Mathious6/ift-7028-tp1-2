@@ -9,6 +9,7 @@ class SimulationConfig:
     SIMULATION_TIME: int = 40000 * SPEED_TIME_FACTOR
     CONFIDENCE_LEVEL: float = 0.95
     NUM_REPLICATIONS: int = 10
+    NUMBER_OF_ROBOTS: int = 2
 
     # TIPS: use field(default_factory=lambda: {}) to initialize a dictionary with default values
     ROBOT_SCENARIOS: Dict[int, float] = field(default_factory=lambda: {
