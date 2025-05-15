@@ -4,7 +4,7 @@
 
 Dans un contexte criant de pénurie de main d'œuvre, l’aéroport de Montréal peine à maintenir ses activités et à suivre l’horaire. Le gestionnaire de l’aéroport envisage de robotiser les activités de chargement et de déchargement des bagages. On désire procéder à une étude de simulation afin de déterminer le nombre de robots à acquérir.
 
-Le gestionnaire a observé que le temps entre deux arrivées d’avions (temps inter-arrivées) ainsi que le temps de chargement/chargement d’un avion se comportent selon deux lois exponentielles. Le temps moyen entre deux arrivées d’avion est de **12.3 minutes**. Le temps moyen nécessaire pour charger et décharger un avion varie en fonction du nombre de robots y travaillant. Le tableau suivant présente le temps moyen nécessaire pour charger et décharger un avion en fonction du nombre de robots qui y travaillent (on ne peut décharger et charger qu’un seul avion à la fois).
+Le gestionnaire a observé que le temps entre deux arrivées d’avions (temps inter-arrivées) ainsi que le temps de chargement/dé-chargement d’un avion se comportent selon deux lois exponentielles. Le temps moyen entre deux arrivées d’avion est de **12.3 minutes**. Le temps moyen nécessaire pour charger et décharger un avion varie en fonction du nombre de robots y travaillant. Le tableau suivant présente le temps moyen nécessaire pour charger et décharger un avion en fonction du nombre de robots qui y travaillent (on ne peut décharger et charger qu’un seul avion à la fois).
 
 | Nombre de robots | Temps moyen pour charger et décharger un avion (minutes) |
 | ---------------- | -------------------------------------------------------- |
