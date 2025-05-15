@@ -1,21 +1,22 @@
-from dataclasses import dataclass, field
-from typing import Dict
+from dataclasses import dataclass
+from typing import Dict, ClassVar
+from src.random.distributions import ExponentialDistribution
 
 
-@dataclass
 class SimulationConfig:
     """Configuration for the simulation."""
-    SIMULATION_TIME: int = 40000
-    CONFIDENCE_LEVEL: float = 0.95
-    NUM_REPLICATIONS: int = 10
 
-    # TIPS: use field(default_factory=lambda: {}) to initialize a dictionary with default values
-    ROBOT_SCENARIOS: Dict[int, float] = field(default_factory=lambda: {
+    SIMULATION_TIME: ClassVar[int] = 40000
+    MEAN_ARRIVAL_TIME: ClassVar[float] = 12.3
+    RANDOM_SEED: ClassVar[int] = 42
+    ROBOT_SCENARIOS: ClassVar[Dict[int, float]] = {
         2: 9.0,
         3: 7.0,
         5: 5.5,
         8: 4.5,
         12: 4.2
-    })
+    }
 
-    MEAN_ARRIVAL_TIME: float = 12.3
+    def __init__(self, num_robots: int):
+        self.num_robots = num_robots
+        self.robot_processing_time = self.ROBOT_SCENARIOS[num_robots]
