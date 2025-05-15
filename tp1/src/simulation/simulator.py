@@ -14,10 +14,11 @@ class Simulator:
 
         number_of_airplane_arrivals : int = 0
         number_of_airplane_discharged : int = 0
+        time_waited_by_robots : int = 0
 
-        for index_of_time in range(self.config.SIMULATION_TIME):
+        for index_of_time in range(1, self.config.SIMULATION_TIME * 10 + 1):
             
-            if (index_of_time * 10) % (self.config.MEAN_ARRIVAL_TIME * 10) == 0:
+            if (index_of_time) % (self.config.MEAN_ARRIVAL_TIME * 10) == 0:
                 airplane = Airplane()
                 airplaines_waiting_queue.put(airplane)
                 number_of_airplane_arrivals += 1
@@ -25,20 +26,25 @@ class Simulator:
             
             if remaining_robots_work_time > 0:
                 remaining_robots_work_time -= 1
-                if remaining_robots_work_time == 0:
+                if remaining_robots_work_time <= 0:
                     number_of_airplane_discharged += 1
+                    remaining_robots_work_time = 0
 
             else:
                 if not airplaines_waiting_queue.empty():
-                    remaining_robots_work_time = self.config.ROBOT_SCENARIOS[self.config.NUMBER_OF_ROBOTS]
+                    remaining_robots_work_time = self.config.ROBOT_SCENARIOS[self.config.NUMBER_OF_ROBOTS] * 10
 
                     airplane: Airplane = airplaines_waiting_queue.get()
                     
                     print(f"Airplane {airplane.id} discharging.")
+                    
+                else:
+                    time_waited_by_robots += 1
 
         print(f"Simulation completed. {airplaines_waiting_queue.qsize()} airplanes left in the queue.")
         print(f"Number of airplanes arrived: {number_of_airplane_arrivals}")
         print(f"Number of airplanes discharged: {number_of_airplane_discharged}")
+        print(f"Time waited by robots: {time_waited_by_robots / 10}")
         
 
 
