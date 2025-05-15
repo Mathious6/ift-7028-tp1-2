@@ -121,14 +121,15 @@ class Airport:
 
 # python -m tp1.src.models.airport
 if __name__ == "__main__":
-    airport = Airport(num_robots=2)
-    simulation_time = 100
+    NUM_ROBOTS = 12
+    SIMULATION_TIME = 40000
 
     print("Starting airport simulation...")
-    airport.run_simulation(simulation_time)
+    airport = Airport(num_robots=NUM_ROBOTS)
+    airport.run_simulation(SIMULATION_TIME)
 
     current_time = airport.simulator.get_current_time()
-    print("\nSimulation Results:")
+    print(f"\nSimulation results w {NUM_ROBOTS} robots:")
     print(f"> Simulation time: {current_time:.1f} minutes")
     print(f"> Total planes: {len(airport.planes)}")
     print(f"> Planes unloaded: {sum(1 for p in airport.planes if p.status == PlaneStatus.UNLOADED)}")
