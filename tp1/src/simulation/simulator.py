@@ -1,5 +1,5 @@
-from .events import Event, EventQueue, EventType
-from typing import Callable, Dict, List, Any
+from tp1.src.simulation.events import Event, EventQueue, EventType
+from typing import Callable
 
 
 class Simulator:
