@@ -14,7 +14,15 @@
             "settings": {
                 "python.defaultInterpreterPath": "/usr/local/bin/python",
                 "python.linting.enabled": true,
-                "python.formatting.provider": "black"
+                "python.formatting.provider": "black",
+                "python.formatting.blackArgs": [
+                    "--line-length",
+                    "120"
+                ],
+                "autopep8.args": [
+                    "--max-line-length",
+                    "120"
+                ]
             }
         }
     },
