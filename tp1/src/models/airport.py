@@ -119,6 +119,7 @@ class Airport:
         return (self.current_plane is None and len(self.queue) > 0)
 
 
+# python -m tp1.src.models.airport
 if __name__ == "__main__":
     airport = Airport(num_robots=2)
     simulation_time = 100
