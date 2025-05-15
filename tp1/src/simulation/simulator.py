@@ -1,19 +1,37 @@
-from .events import Event
+from .events import Event, EventQueue, EventType
+from typing import Callable, Dict, List, Any
 
 
 class Simulator:
-    def __init__(self, config: dict):
-        """Initialize the simulator with configuration parameters."""
-        pass
+    """Generic discrete event simulator."""
 
-    def run_simulation(self, scenario_id: int, replication: int) -> dict:
-        """Run a single simulation replication for a given scenario."""
-        pass
+    def __init__(self):
+        """Initialize the simulator."""
+        self.event_queue = EventQueue()
+        self.current_time = 0.0
+        self.event_handlers = {}  # {EventType: Callable[[Event], None]}
 
-    def _process_event(self, event: Event) -> None:
-        """Process a single simulation event."""
-        pass
+    def register_handler(self, event_type: EventType, handler: Callable[[Event], None]) -> None:
+        """Register an event handler for a specific event type."""
+        self.event_handlers[event_type] = handler
 
-    def _schedule_next_event(self) -> None:
-        """Schedule the next event in the simulation."""
-        pass
+    def schedule(self, event: Event) -> None:
+        """Schedule a new event."""
+        self.event_queue.schedule(event)
+
+    def run(self, max_time: float) -> None:
+        """Run the simulation until max_time is reached."""
+        while self.event_queue.has_events() and self.event_queue.current_time < max_time:
+            event = self.event_queue.next_event()
+            self.current_time = event.time
+
+            if event.type in self.event_handlers:
+                self.event_handlers[event.type](event)
+
+    def get_current_time(self) -> float:
+        """Get the current simulation time."""
+        return self.current_time
+
+    def has_events(self) -> bool:
+        """Check if there are any events remaining."""
+        return self.event_queue.has_events()
