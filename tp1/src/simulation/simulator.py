@@ -26,23 +26,26 @@ class Simulator:
                 number_of_airplane_arrivals += 1
                 print(f"Airplane {airplane.id} added to airport waiting queue at {index_of_time} time.")
             
-            if remaining_robots_work_time > 0:
-                remaining_robots_work_time -= 1
-                if remaining_robots_work_time <= 0:
-                    number_of_airplane_discharged += 1
-                    remaining_robots_work_time = 0
-                    print(f"Airplane discharged at {index_of_time} time.")
 
-            else:
+            if remaining_robots_work_time <= 0:
                 if not airplaines_waiting_queue.empty():
                     remaining_robots_work_time = self.config.ROBOT_SCENARIOS[self.config.NUMBER_OF_ROBOTS] * 10
 
                     airplane: Airplane = airplaines_waiting_queue.get()
                     
-                    print(f"Airplane {airplane.id} discharging at {index_of_time} time.")
+                    print(f"Airplane {airplane.id} begin discharging at {index_of_time} time.")
                     
                 else:
+                    # print("Robots are waiting for airplanes to discharge.")
                     time_waited_by_robots += 1
+            
+            if remaining_robots_work_time > 0:
+                # print("Robots are working on discharging airplanes.")
+                remaining_robots_work_time -= 1
+                if remaining_robots_work_time <= 0:
+                    number_of_airplane_discharged += 1
+                    remaining_robots_work_time = 0
+                    print(f"Airplane discharged at {index_of_time} time.")
 
         print(f"Simulation completed. {airplaines_waiting_queue.qsize()} airplanes left in the queue.")
         print(f"Number of airplanes arrived: {number_of_airplane_arrivals}")
