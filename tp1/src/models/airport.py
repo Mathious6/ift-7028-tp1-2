@@ -43,5 +43,5 @@ class Airport:
         thread_discharge.start()
 
         self.airplanes_waiting_queue.join()
-        print(f"Airport {self.id} operation completed.")
+        print(f"Airport operation completed.")
         

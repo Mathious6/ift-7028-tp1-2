@@ -5,7 +5,7 @@ from typing import Dict
 @dataclass
 class SimulationConfig:
     """Configuration for the simulation."""
-    SPEED_TIME_FACTOR: int = 1000
+    SPEED_TIME_FACTOR: int = 1
     SIMULATION_TIME: int = 40000 * SPEED_TIME_FACTOR
     CONFIDENCE_LEVEL: float = 0.95
     NUM_REPLICATIONS: int = 10

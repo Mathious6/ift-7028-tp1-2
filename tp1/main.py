@@ -9,8 +9,10 @@ def main():
     """Main entry point for the simulation."""
     
     config: SimulationConfig = SimulationConfig()
-    airport: Airport = Airport(config)
-    airport.launch_operation()
+    simulator: Simulator = Simulator(config)
+
+    simulator.run_simulation()
+    
 
 if __name__ == "__main__":
     main()

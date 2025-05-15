@@ -13,6 +13,3 @@ class Airplane:
     def __init__(self):
         self.id = random.randint(100000000, 999999999)
 
-    def discharge(self, time_to_wait: float) -> None:
-        """Records the time when the airplane is discharged."""
-        time.sleep(time_to_wait)
