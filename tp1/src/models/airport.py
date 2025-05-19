@@ -44,8 +44,8 @@ class Airport:
         """Handle an end of loading event."""
         current_time = event.time
 
-        self.finish_serving_plane(current_time)
         logger.debug(f"Time {current_time:.1f}: Plane {event.data.id:04d} finished\t[queue: {self.get_queue_length()}]")
+        self.finish_serving_plane(current_time)
 
     def add_plane(self, arrival_time: float) -> AirPlane:
         """Add a new plane to the system."""
@@ -118,7 +118,7 @@ class Airport:
 
     def can_start_service(self) -> bool:
         """Check if we can start serving a new plane."""
-        return (self.current_plane is None and len(self.queue) > 0)
+        return (self.current_plane is None and self.get_queue_length() > 0)
 
 
 # python -m tp1.src.models.airport

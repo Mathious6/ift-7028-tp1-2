@@ -30,4 +30,5 @@ def setup_logger(name: Optional[str] = None) -> logging.Logger:
     return logging.getLogger(name)
 
 
-configure_root_logger(level=logging.INFO)
+# DEBUG TIP: Use DEBUG level to see all the logs
+configure_root_logger(level=logging.DEBUG)

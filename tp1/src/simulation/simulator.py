@@ -26,6 +26,7 @@ class Simulator:
     def run(self, max_time: float) -> None:
         """Run the simulation until max_time is reached."""
         while self.event_queue.has_events():
+            # DEBUG TIP: Breakpoint here to see the events in the queue
             event = self.event_queue.next_event()
 
             # This avoid to process events that are after the max_time
