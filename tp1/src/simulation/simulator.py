@@ -19,19 +19,19 @@ class Simulator:
         """Schedule a new event."""
         self.event_queue.schedule(event)
 
-    def run(self, max_time: float) -> None:
-        """Run the simulation until max_time is reached."""
-        while self.event_queue.has_events() and self.event_queue.current_time < max_time:
-            event = self.event_queue.next_event()
-            self.current_time = event.time
-
-            if event.type in self.event_handlers:
-                self.event_handlers[event.type](event)
-
     def get_current_time(self) -> float:
         """Get the current simulation time."""
         return self.current_time
 
-    def has_events(self) -> bool:
-        """Check if there are any events remaining."""
-        return self.event_queue.has_events()
+    def run(self, max_time: float) -> None:
+        """Run the simulation until max_time is reached."""
+        while self.event_queue.has_events():
+            event = self.event_queue.next_event()
+
+            # This avoid to process events that are after the max_time
+            if event.time > max_time:
+                break
+
+            self.current_time = event.time
+            if event.type in self.event_handlers:
+                self.event_handlers[event.type](event)

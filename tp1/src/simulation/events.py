@@ -17,7 +17,7 @@ class Event:
     """Represents an event in the simulation."""
     time: float  # When the event occurs
     type: EventType  # Type of event
-    data: Any = None  # Additional data associated with the event
+    data: Any = None  # Additional data associated with the event (e.g. plane)
     callback: Callable = None  # Function to call when event occurs
 
     def __lt__(self, other):
@@ -53,21 +53,13 @@ class EventQueue:
         """Check if there are any events remaining."""
         return len(self._queue) > 0
 
-    def clear(self) -> None:
-        """Clear all events from the queue."""
-        self._queue.clear()
-        self._time = 0.0
-
 
 if __name__ == "__main__":
     queue = EventQueue()
 
-    queue.schedule(
-        Event(time=10.0, type=EventType.PLANE_ARRIVAL, data="Plane 1"))
-    queue.schedule(
-        Event(time=5.0, type=EventType.START_LOADING, data="Plane 2"))
-    queue.schedule(
-        Event(time=15.0, type=EventType.END_LOADING, data="Plane 1"))
+    queue.schedule(Event(time=10.0, type=EventType.PLANE_ARRIVAL, data="Plane 1"))
+    queue.schedule(Event(time=5.0, type=EventType.START_LOADING, data="Plane 2"))
+    queue.schedule(Event(time=15.0, type=EventType.END_LOADING, data="Plane 1"))
 
     print("Processing events in chronological order:")
     while queue.has_events():
