@@ -6,7 +6,7 @@ from tp1.config.logger import setup_logger
 from tp1.src.simulation.events import Event, EventType
 from tp1.src.simulation.simulator import Simulator
 
-logger = setup_logger("tp1.src.models.airport")
+logger = setup_logger("airport")
 
 
 class Airport:
@@ -35,7 +35,7 @@ class Airport:
 
         plane = self.add_plane(current_time)
         self.schedule_next_arrival(current_time)
-        logger.debug(f"Time {current_time:.1f}: Plane {plane.id:04d} just arrived\t[queue: {self.get_queue_length()}]")
+        logger.debug(f"Time {current_time:.1f}: Plane {plane.id:04d} arrived\t[queue: {self.get_queue_length()}]")
 
         if self.can_start_service():
             self.start_serving_plane(current_time)
@@ -45,7 +45,7 @@ class Airport:
         current_time = event.time
 
         self.finish_serving_plane(current_time)
-        logger.debug(f"Time {current_time:.1f}: Plane {event.data.id:04d} just finished\t[queue: {self.get_queue_length()}]")
+        logger.debug(f"Time {current_time:.1f}: Plane {event.data.id:04d} finished\t[queue: {self.get_queue_length()}]")
 
     def add_plane(self, arrival_time: float) -> AirPlane:
         """Add a new plane to the system."""
@@ -72,7 +72,7 @@ class Airport:
         service_end_time = current_time + service_time
 
         self.simulator.schedule(Event(time=service_end_time, type=EventType.END_LOADING, data=self.current_plane))
-        logger.debug(f"Time {current_time:.1f}: Plane {self.current_plane.id:04d} is being served\t[delay: {service_time: .1f}m]")
+        logger.debug(f"Time {current_time:.1f}: Plane {self.current_plane.id:04d} served \t[delay: {service_time: .1f}m]")
 
     def finish_serving_plane(self, current_time: float) -> None:
         """Finish serving the current plane."""

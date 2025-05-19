@@ -30,4 +30,4 @@ def setup_logger(name: Optional[str] = None) -> logging.Logger:
     return logging.getLogger(name)
 
 
-configure_root_logger()
+configure_root_logger(level=logging.INFO)
