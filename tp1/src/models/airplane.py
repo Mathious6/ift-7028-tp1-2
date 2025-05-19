@@ -14,8 +14,9 @@ class PlaneStatus(Enum):
 class AirPlane:
     """Represents an aircraft in the simulation."""
     id: int
-    arrival_time: float
     status: PlaneStatus = PlaneStatus.WAITING
+
+    # TIMINGS:
     queue_entry_time: Optional[float] = None
     service_start_time: Optional[float] = None
     service_end_time: Optional[float] = None
