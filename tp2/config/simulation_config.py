@@ -1,11 +1,12 @@
 from dataclasses import dataclass, field
-from typing import Dict
+from typing import ClassVar, Dict
 
 
 @dataclass
 class SimulationConfig:
 
     SIMULATION_TIME: int = 40000
+    RANDOM_SEED: ClassVar[int] = 42
 
     ROBOTs_MEAN_UNLOADING_TIMES: Dict[int, float] = field(
         default_factory=lambda: {

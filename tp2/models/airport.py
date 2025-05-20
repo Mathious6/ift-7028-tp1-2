@@ -3,7 +3,7 @@ from simpy import Environment, Resource
 from random import expovariate
 from typing import Generator
 
-from config.config import SimulationConfig
+from config.simulation_config import SimulationConfig
 
 
 class Airport:

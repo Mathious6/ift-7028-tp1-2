@@ -1,5 +1,5 @@
 from logging import Logger
-from config.config import SimulationConfig
+from config.simulation_config import SimulationConfig
 from config.logger import setup_logger
 from models.airport import Airport
 
