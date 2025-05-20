@@ -63,6 +63,10 @@ def main():
     SimulationPlots.plot_mean_queue_length(scenarios, SIMULATION_DURATION, WINDOW_SIZE)
     SimulationPlots.plot_waiting_time(scenarios, SIMULATION_DURATION, WINDOW_SIZE)
     SimulationPlots.plot_mean_waiting_time(scenarios, SIMULATION_DURATION, WINDOW_SIZE)
+    SimulationPlots.plot_robot_utilization(scenarios, SIMULATION_DURATION, WINDOW_SIZE)
+    SimulationPlots.plot_mean_robot_utilization(
+        scenarios, SIMULATION_DURATION, WINDOW_SIZE
+    )
 
 
 if __name__ == "__main__":
