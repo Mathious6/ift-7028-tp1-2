@@ -53,16 +53,14 @@ class Simulation():
             queue_end_waiting_time = self.env.now
             self.total_time_in_queue += (queue_end_waiting_time - queue_start_waiting_time)
 
-            # Le temps de déchargement correspond à une distribution exponentielle dont la moyenne est établie dans SimulationConfig
-            unloading_time = expovariate(1 / self.config.ROBOT_SCENARIOS[self.config.NUMBER_OF_ROBOTS])
-
             print(f"Airplane {id} started unloading at {self.env.now}")
             # Simule le déchargement de l'avion
             self.number_of_plane_in_queue -= 1
             # self.are_robots_busy = True
             robots_busy_start_time = self.env.now
 
-            yield self.env.timeout(unloading_time) # Simule le temps de déchargement
+            # Le temps de déchargement correspond à une distribution exponentielle dont la moyenne est établie dans SimulationConfig
+            yield self.env.timeout(expovariate(1 / self.config.ROBOT_SCENARIOS[self.config.NUMBER_OF_ROBOTS])) # Simule le temps de déchargement
             # Fin du déchargement
             self.total_number_of_planes_unloaded += 1
 
