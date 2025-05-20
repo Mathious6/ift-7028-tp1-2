@@ -19,7 +19,9 @@ class SimulationPlots:
         pass
 
     @staticmethod
-    def plot_unloaded_planes(scenarios: dict[int, list], simulation_duration: int, window_size: int = 600) -> None:
+    def plot_unloaded_planes(
+        scenarios: dict[int, list], simulation_duration: int, window_size: int
+    ) -> None:
         """
         Plot the number of planes unloaded over time for all scenarios.
         - scenarios (dict[int, list]): Dictionary mapping scenario number to list of AirPlane objects
@@ -36,24 +38,27 @@ class SimulationPlots:
             for window_start in time_windows:
                 window_end = window_start + window_size
                 planes_in_window = sum(
-                    1 for plane in planes
+                    1
+                    for plane in planes
                     if plane.service_end_time is not None
                     and window_start <= plane.service_end_time < window_end
                 )
                 planes_per_hour.append(planes_in_window)
 
-            plt.plot(time_windows, planes_per_hour, label=f'{scenario_num} robots')
+            plt.plot(time_windows, planes_per_hour, label=f"{scenario_num} robots")
 
-        plt.title('Number of Planes Unloaded by Scenario')
-        plt.xlabel('Time (minutes)')
-        plt.ylabel(f'Number of planes unloaded per {window_size} minutes')
-        plt.grid(True, linestyle='--', alpha=0.7)
+        plt.title("Number of Planes Unloaded by Scenario")
+        plt.xlabel("Time (minutes)")
+        plt.ylabel(f"Number of planes unloaded per {window_size} minutes")
+        plt.grid(True, linestyle="--", alpha=0.7)
         plt.legend()
-        plt.savefig('unloaded_planes.png')
+        plt.savefig("unloaded_planes.png")
         plt.close()
 
     @staticmethod
-    def plot_mean_unloaded_planes(scenarios: dict[int, list], simulation_duration: int, window_size: int = 600) -> None:
+    def plot_mean_unloaded_planes(
+        scenarios: dict[int, list], simulation_duration: int, window_size: int
+    ) -> None:
         """
         Plot the mean number of planes unloaded from the start of simulation up to each time point.
         - scenarios (dict[int, list]): Dictionary mapping scenario number to list of AirPlane objects
@@ -70,22 +75,124 @@ class SimulationPlots:
 
             for window_end in time_windows:
                 planes_up_to_now = sum(
-                    1 for plane in planes
+                    1
+                    for plane in planes
                     if plane.service_end_time is not None
                     and plane.service_end_time <= window_end
                 )
                 cumulative_planes = planes_up_to_now
 
                 hours_elapsed = window_end / 60  # Convert minutes to hours
-                mean_planes_per_hour = cumulative_planes / hours_elapsed if hours_elapsed > 0 else 0
+                mean_planes_per_hour = (
+                    cumulative_planes / hours_elapsed if hours_elapsed > 0 else 0
+                )
                 mean_planes.append(mean_planes_per_hour)
 
-            plt.plot(time_windows, mean_planes, label=f'{scenario_num} robots', marker='.', markersize=4)
+            plt.plot(
+                time_windows,
+                mean_planes,
+                label=f"{scenario_num} robots",
+                marker=".",
+                markersize=4,
+            )
 
-        plt.title('Mean Number of Planes Unloaded (Cumulative Average)')
-        plt.xlabel('Time (minutes)')
-        plt.ylabel(f'Mean planes unloaded per {window_size} minutes')
-        plt.grid(True, linestyle='--', alpha=0.7)
+        plt.title("Mean Number of Planes Unloaded (Cumulative Average)")
+        plt.xlabel("Time (minutes)")
+        plt.ylabel(f"Mean planes unloaded per {window_size} minutes")
+        plt.grid(True, linestyle="--", alpha=0.7)
         plt.legend()
-        plt.savefig('mean_unloaded_planes.png')
+        plt.savefig("unloaded_mean_planes.png")
+        plt.close()
+
+    @staticmethod
+    def plot_queue_length(
+        scenarios: dict[int, list], simulation_duration: int, window_size: int = 600
+    ) -> None:
+        """
+        Plot the instantaneous queue length over time for all scenarios.
+        - scenarios (dict[int, list]): Dictionary mapping scenario number to list of AirPlane objects
+        - simulation_duration (int): Total duration of simulation in minutes
+        - window_size (int): Size of time windows in minutes for sampling
+        """
+        plt.figure(figsize=(20, 5))
+
+        time_windows = range(0, simulation_duration, window_size)
+
+        for scenario_num, planes in scenarios.items():
+            queue_lengths = []
+
+            for window_start in time_windows:
+                window_end = window_start + window_size
+                planes_in_queue = sum(
+                    1
+                    for plane in planes
+                    if (
+                        plane.arrival_time <= window_end
+                        and (
+                            plane.service_start_time is None
+                            or plane.service_start_time > window_end
+                        )
+                    )
+                )
+                queue_lengths.append(planes_in_queue)
+
+            plt.plot(
+                time_windows,
+                queue_lengths,
+                label=f"{scenario_num} robots",
+                marker=".",
+                markersize=4,
+            )
+
+        plt.title("Number of Planes in Queue Over Time")
+        plt.xlabel("Time (minutes)")
+        plt.ylabel(f"Number of planes in queue per {window_size} minutes")
+        plt.grid(True, linestyle="--", alpha=0.7)
+        plt.legend()
+        plt.savefig("queue_length.png")
+        plt.close()
+
+    @staticmethod
+    def plot_mean_queue_length(
+        scenarios: dict[int, list], simulation_duration: int, window_size: int = 600
+    ) -> None:
+        """
+        Plot the mean queue length from the start of simulation up to each time point.
+        - scenarios (dict[int, list]): Dictionary mapping scenario number to list of AirPlane objects
+        - simulation_duration (int): Total duration of simulation in minutes
+        - window_size (int): Size of time windows in minutes for sampling
+        """
+        plt.figure(figsize=(20, 5))
+
+        time_windows = range(0, simulation_duration, window_size)
+
+        for scenario_num, planes in scenarios.items():
+            mean_queue_lengths = []
+            total_queue_time = 0
+
+            for window_end in time_windows:
+                total_queue_time = sum(
+                    min(window_end, plane.service_start_time or window_end)
+                    - plane.arrival_time
+                    for plane in planes
+                    if plane.arrival_time <= window_end
+                )
+
+                mean_queue = total_queue_time / window_end if window_end > 0 else 0
+                mean_queue_lengths.append(mean_queue)
+
+            plt.plot(
+                time_windows,
+                mean_queue_lengths,
+                label=f"{scenario_num} robots",
+                marker=".",
+                markersize=4,
+            )
+
+        plt.title("Mean Queue Length Over Time (Cumulative Average)")
+        plt.xlabel("Time (minutes)")
+        plt.ylabel(f"Mean number of planes in queue per {window_size} minutes")
+        plt.grid(True, linestyle="--", alpha=0.7)
+        plt.legend()
+        plt.savefig("queue_mean_length.png")
         plt.close()

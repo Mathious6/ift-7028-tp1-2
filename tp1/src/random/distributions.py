@@ -22,7 +22,7 @@ class ExponentialDistribution(RandomDistributions):
     def generate(self) -> float:
         """Generate a random number from an exponential distribution."""
         u = random.random()  # Uniform random number in [0,1)
-        return - (1 / self.lambda_) * math.log(1 - u)
+        return -(1 / self.lambda_) * math.log(1 - u)
 
 
 if __name__ == "__main__":
