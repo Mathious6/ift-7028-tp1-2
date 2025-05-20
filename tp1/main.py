@@ -5,6 +5,7 @@ from tp1.config.logger import setup_logger
 import time
 
 SIMULATION_DURATION = 40000
+WINDOW_SIZE = 600
 
 
 def main():
@@ -54,7 +55,7 @@ def main():
 
         scenarios[num_robots] = airport.planes
 
-    SimulationPlots.plot_unloaded_planes_per_hour(scenarios, SIMULATION_DURATION)
+    SimulationPlots.plot_unloaded_planes(scenarios, SIMULATION_DURATION, WINDOW_SIZE)
 
 
 if __name__ == "__main__":
