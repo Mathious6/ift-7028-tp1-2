@@ -19,7 +19,9 @@ class SimulationPlots:
         pass
 
     @staticmethod
-    def plot_unloaded_planes(scenarios: dict[int, list], simulation_duration: int, window_size: int = 600) -> None:
+    def plot_unloaded_planes(
+        scenarios: dict[int, list], simulation_duration: int, window_size: int = 600
+    ) -> None:
         """
         Plot the number of planes unloaded over time for all scenarios.
         - scenarios (dict[int, list]): Dictionary mapping scenario number to list of AirPlane objects
