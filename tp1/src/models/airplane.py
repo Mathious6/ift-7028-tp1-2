@@ -1,18 +1,32 @@
 from dataclasses import dataclass
-import random
-import time
 from typing import Optional
+from enum import Enum, auto
 
-from config.simulation import SimulationConfig
+
+class PlaneStatus(Enum):
+    """Status of a plane in the system."""
+    WAITING = auto()
+    BEING_SERVED = auto()
+    UNLOADED = auto()
 
 
 @dataclass
-class Airplane:
-    """Represents an airplane in the simulation."""
+class AirPlane:
+    """Represents an aircraft in the simulation."""
+    id: int
+    status: PlaneStatus = PlaneStatus.WAITING
 
-    def __init__(self):
-        self.id = random.randint(100000000, 999999999)
+    # TIMINGS:
+    queue_entry_time: Optional[float] = None
+    service_start_time: Optional[float] = None
+    service_end_time: Optional[float] = None
 
-    def discharge(self, time_to_wait: float) -> None:
-        """Records the time when the airplane is discharged."""
-        time.sleep(time_to_wait)
+    @property
+    def waiting_time(self) -> float:
+        """Calculate the time the plane spent waiting in queue."""
+        return self.service_start_time - self.queue_entry_time
+
+    @property
+    def service_time(self) -> float:
+        """Calculate the time the plane spent being served."""
+        return self.service_end_time - self.service_start_time
