@@ -127,7 +127,8 @@ class SimulationPlots:
                     1
                     for plane in planes
                     if (
-                        plane.arrival_time <= window_end
+                        plane.queue_entry_time is not None
+                        and plane.queue_entry_time <= window_end
                         and (
                             plane.service_start_time is None
                             or plane.service_start_time > window_end
@@ -173,9 +174,10 @@ class SimulationPlots:
             for window_end in time_windows:
                 total_queue_time = sum(
                     min(window_end, plane.service_start_time or window_end)
-                    - plane.arrival_time
+                    - plane.queue_entry_time
                     for plane in planes
-                    if plane.arrival_time <= window_end
+                    if plane.queue_entry_time is not None
+                    and plane.queue_entry_time <= window_end
                 )
 
                 mean_queue = total_queue_time / window_end if window_end > 0 else 0
