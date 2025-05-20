@@ -1,5 +1,6 @@
 from tp1.src.models.airport import Airport
 from tp1.config.simulation import SimulationConfig
+from tp1.src.visualization.plots import SimulationPlots
 from tp1.config.logger import setup_logger
 import time
 
@@ -11,6 +12,8 @@ def main():
     root_logger = setup_logger()
 
     root_logger.info(f"Starting simulation with {SIMULATION_DURATION}m per scenario")
+
+    scenarios = {}
 
     for num_robots in list(SimulationConfig.ROBOT_SCENARIOS.keys()):
         start_time = time.time()  # only for analytics
@@ -32,6 +35,10 @@ def main():
         root_logger.info(f"Planes per hour: {airport.get_planes_per_hour(current_time):.1f}")
         root_logger.info(f"Average queue waiting time: {avg_queue_waiting_time:.1f} minutes")
         root_logger.info(f"Scenario execution time: {time.time() - start_time:.2f} seconds")
+
+        scenarios[num_robots] = airport.planes
+
+    SimulationPlots.plot_unloaded_planes_per_hour(scenarios, SIMULATION_DURATION)
 
 
 if __name__ == "__main__":

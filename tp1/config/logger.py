@@ -31,4 +31,4 @@ def setup_logger(name: Optional[str] = None) -> logging.Logger:
 
 
 # DEBUG TIP: Use DEBUG level to see all the logs
-configure_root_logger(level=logging.DEBUG)
+configure_root_logger(level=logging.INFO)
