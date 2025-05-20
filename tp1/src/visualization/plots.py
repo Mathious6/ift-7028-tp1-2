@@ -24,6 +24,7 @@ class SimulationPlots:
         Plot the number of planes unloaded over time for all scenarios.
         - scenarios (dict[int, list]): Dictionary mapping scenario number to list of AirPlane objects
         - simulation_duration (int): Total duration of simulation in minutes
+        - window_size (int): Size of time windows in minutes for calculating means
         """
         plt.figure(figsize=(20, 5))
 
@@ -43,10 +44,48 @@ class SimulationPlots:
 
             plt.plot(time_windows, planes_per_hour, label=f'{scenario_num} robots')
 
-        plt.title('Number of Planes Unloaded per Hour by Scenario')
+        plt.title('Number of Planes Unloaded by Scenario')
         plt.xlabel('Time (minutes)')
-        plt.ylabel('Number of planes unloaded per hour')
+        plt.ylabel(f'Number of planes unloaded per {window_size} minutes')
         plt.grid(True, linestyle='--', alpha=0.7)
         plt.legend()
-        plt.savefig('unloaded_planes_per_hour.png')
+        plt.savefig('unloaded_planes.png')
+        plt.close()
+
+    @staticmethod
+    def plot_mean_unloaded_planes(scenarios: dict[int, list], simulation_duration: int, window_size: int = 600) -> None:
+        """
+        Plot the mean number of planes unloaded from the start of simulation up to each time point.
+        - scenarios (dict[int, list]): Dictionary mapping scenario number to list of AirPlane objects
+        - simulation_duration (int): Total duration of simulation in minutes
+        - window_size (int): Size of time windows in minutes for calculating means
+        """
+        plt.figure(figsize=(20, 5))
+
+        time_windows = range(0, simulation_duration, window_size)
+
+        for scenario_num, planes in scenarios.items():
+            mean_planes = []
+            cumulative_planes = 0
+
+            for window_end in time_windows:
+                planes_up_to_now = sum(
+                    1 for plane in planes
+                    if plane.service_end_time is not None
+                    and plane.service_end_time <= window_end
+                )
+                cumulative_planes = planes_up_to_now
+
+                hours_elapsed = window_end / 60  # Convert minutes to hours
+                mean_planes_per_hour = cumulative_planes / hours_elapsed if hours_elapsed > 0 else 0
+                mean_planes.append(mean_planes_per_hour)
+
+            plt.plot(time_windows, mean_planes, label=f'{scenario_num} robots', marker='.', markersize=4)
+
+        plt.title('Mean Number of Planes Unloaded (Cumulative Average)')
+        plt.xlabel('Time (minutes)')
+        plt.ylabel(f'Mean planes unloaded per {window_size} minutes')
+        plt.grid(True, linestyle='--', alpha=0.7)
+        plt.legend()
+        plt.savefig('mean_unloaded_planes.png')
         plt.close()
