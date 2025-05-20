@@ -7,6 +7,7 @@ from enum import Enum, auto
 
 class EventType(Enum):
     """Types of events that can occur in the simulation."""
+
     PLANE_ARRIVAL = auto()
     START_LOADING = auto()
     END_LOADING = auto()
@@ -15,6 +16,7 @@ class EventType(Enum):
 @dataclass
 class Event:
     """Represents an event in the simulation."""
+
     time: float  # When the event occurs
     type: EventType  # Type of event
     data: Any = None  # Additional data associated with the event (e.g. plane)

@@ -17,4 +17,4 @@ class SimulationConfig:
         }
     )
 
-    AIRPLANES_MEAN_ARRIVAL_TIME: float = 12.3
+    PLANES_MEAN_ARRIVAL_TIME: float = 12.3

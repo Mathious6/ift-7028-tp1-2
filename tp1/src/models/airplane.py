@@ -5,6 +5,7 @@ from enum import Enum, auto
 
 class PlaneStatus(Enum):
     """Status of a plane in the system."""
+
     WAITING = auto()
     BEING_SERVED = auto()
     UNLOADED = auto()
@@ -13,6 +14,7 @@ class PlaneStatus(Enum):
 @dataclass
 class AirPlane:
     """Represents an aircraft in the simulation."""
+
     id: int
     status: PlaneStatus = PlaneStatus.WAITING
 

@@ -11,7 +11,9 @@ class Simulator:
         self.current_time = 0.0
         self.event_handlers = {}  # {EventType: Callable[[Event], None]}
 
-    def register_handler(self, event_type: EventType, handler: Callable[[Event], None]) -> None:
+    def register_handler(
+        self, event_type: EventType, handler: Callable[[Event], None]
+    ) -> None:
         """Register an event handler for a specific event type."""
         self.event_handlers[event_type] = handler
 

@@ -14,7 +14,7 @@ class SimulationConfig:
         3: 7.0,
         5: 5.5,
         8: 4.5,
-        12: 4.2
+        12: 4.2,
     }
 
     def __init__(self, num_robots: int):

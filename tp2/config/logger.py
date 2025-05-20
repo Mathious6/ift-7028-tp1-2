@@ -4,7 +4,6 @@ from typing import Optional
 
 
 def configure_root_logger(level: int = logging.DEBUG) -> None:
-    """Configure the root logger with a single handler."""
     root_logger = logging.getLogger()
     root_logger.setLevel(level)
 
@@ -23,12 +22,8 @@ def configure_root_logger(level: int = logging.DEBUG) -> None:
 
 
 def setup_logger(name: Optional[str] = None) -> logging.Logger:
-    """
-    Get a logger with the specified name.
-    The root logger should be configured first using configure_root_logger().
-    """
+
     return logging.getLogger(name)
 
 
-# DEBUG TIP: Use DEBUG level to see all the logs
 configure_root_logger(level=logging.INFO)
