@@ -1,88 +1,88 @@
 from typing import Generator
 from simpy import *
-from random import randint, expovariate
+from random import expovariate
+from uuid import uuid4, UUID
 
 from config.config import SimulationConfig
 
 
-class Simulation():
+class Simulation:
 
-    def __init__(self) -> None:
-        """
-        Initialize the simulation.
-        """
-        self.config: SimulationConfig = SimulationConfig()
+    def __init__(self, config: SimulationConfig) -> None:
+        self.config: SimulationConfig = config
         self.env: Environment = Environment()
         self.robots: Resource = Resource(self.env)
 
         self.total_time_in_queue: float = 0.0
         self.total_number_of_planes_unloaded: int = 0
         self.number_of_plane_in_queue: int = 0
-        
-        # self.are_robots_busy: bool = False
+
         self.robots_busy_time: float = 0.0
 
-        
     def run(self) -> None:
-        """
-        Run the simulation.
-        """
-        self.env.process(self._airplane_arrival())
+        self.env.process(self._simulate_airplane_arrival())
         self.env.run(until=self.config.SIMULATION_TIME)
-        print("Simulation finished.")
-    
-    def _airplane_arrival(self) -> Generator:
+
+    def _simulate_airplane_arrival(self) -> Generator:
         while True:
-            # Simule l'arrivée d'un avion
-            yield self.env.timeout(expovariate(1 / self.config.MEAN_ARRIVAL_TIME))
+            yield from self._wait_for_new_airplane()
+            airplane_id: UUID = self._create_new_aiplane()
+            self.env.process(self._simulate_airplane_unloading(airplane_id))
 
-            # Crée un nouvel avion
-            self.env.process(self._airplane())
+    def _wait_for_new_airplane(self) -> Generator:
+        yield self.env.timeout(expovariate(1 / self.config.MEAN_ARRIVAL_TIME))
 
-    def _airplane(self) -> Generator:
+    def _create_new_aiplane(self) -> UUID:
         arrival_time = self.env.now
-        id: int = randint(111111111, 999999999)
-        print(f"Airplane {id} arrived at {arrival_time}")
-        # Incrémente le nombre d'avions dans la file d'attente
+        airplane_id: UUID = uuid4()
         self.number_of_plane_in_queue += 1
+        print(f"Airplane {airplane_id} arrived at {arrival_time}")
+        return airplane_id
 
-        # Simule l'attente de l'avion pour le déchargement
+    def _simulate_airplane_unloading(self, airplane_id: UUID) -> Generator:
         with self.robots.request() as request:
-            queue_start_waiting_time = self.env.now
-            yield request # Attendre que les robots soit disponible
-            queue_end_waiting_time = self.env.now
-            self.total_time_in_queue += (queue_end_waiting_time - queue_start_waiting_time)
-
-            print(f"Airplane {id} started unloading at {self.env.now}")
-            # Simule le déchargement de l'avion
+            yield from self._wait_for_robots(request)
+            print(f"Airplane {airplane_id} started unloading at {self.env.now}")
             self.number_of_plane_in_queue -= 1
-            # self.are_robots_busy = True
-            robots_busy_start_time = self.env.now
+            yield from self._robots_unload_airplane()
+            print(f"Airplane {airplane_id} finished unloading at {self.env.now}")
 
-            # Le temps de déchargement correspond à une distribution exponentielle dont la moyenne est établie dans SimulationConfig
-            yield self.env.timeout(expovariate(1 / self.config.ROBOT_SCENARIOS[self.config.NUMBER_OF_ROBOTS])) # Simule le temps de déchargement
-            # Fin du déchargement
-            self.total_number_of_planes_unloaded += 1
+    def _wait_for_robots(self, robot_request) -> Generator:
+        queue_start_waiting_time = self.env.now
+        yield robot_request
+        queue_end_waiting_time = self.env.now
+        self.total_time_in_queue += queue_end_waiting_time - queue_start_waiting_time
 
-            robots_busy_end_time = self.env.now
-            # self.are_robots_busy = False
-            self.robots_busy_time += (robots_busy_end_time - robots_busy_start_time)
-            print(f"Airplane {id} finished unloading at {self.env.now}")
-            
+    def _robots_unload_airplane(self) -> Generator:
+        robots_busy_start_time = self.env.now
 
-    
+        yield self.env.timeout(
+            expovariate(1 / self.config.ROBOT_SCENARIOS[self.config.NUMBER_OF_ROBOTS])
+        )
+        self.total_number_of_planes_unloaded += 1
+
+        robots_busy_end_time = self.env.now
+        self.robots_busy_time += robots_busy_end_time - robots_busy_start_time
+
     def get_performance_metrics(self) -> dict:
-        """
-        Get the performance metrics of the simulation.
-        """
-        number_of_planes_unloaded_per_hour = self.total_number_of_planes_unloaded / (self.config.SIMULATION_TIME / 60)
-        average_time_in_queue = self.total_time_in_queue / self.total_number_of_planes_unloaded if self.total_number_of_planes_unloaded > 0 else 0
-        percentage_of_time_robots_busy = (self.robots_busy_time / self.config.SIMULATION_TIME) * 100 if self.config.SIMULATION_TIME > 0 else 0
-    
+        number_of_planes_unloaded_per_hour = self.total_number_of_planes_unloaded / (
+            self.config.SIMULATION_TIME / 60
+        )
+        average_time_in_queue = (
+            self.total_time_in_queue / self.total_number_of_planes_unloaded
+            if self.total_number_of_planes_unloaded > 0
+            else 0
+        )
+        percentage_of_time_robots_busy = (
+            (self.robots_busy_time / self.config.SIMULATION_TIME) * 100
+            if self.config.SIMULATION_TIME > 0
+            else 0
+        )
+
         return {
             "total_number_of_planes_unloaded": self.total_number_of_planes_unloaded,
             "number_of_planes_unloaded_per_hour": number_of_planes_unloaded_per_hour,
             "number_of_plane_in_queue": self.number_of_plane_in_queue,
             "average_time_in_queue": average_time_in_queue,
-            "percentage_of_time_robots_busy": percentage_of_time_robots_busy
+            "percentage_of_time_robots_busy": percentage_of_time_robots_busy,
         }

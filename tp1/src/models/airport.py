@@ -29,19 +29,21 @@ class Airport:
         while True:
             if not self.airplanes_waiting_queue.empty():
                 discharged_airplane: Airplane = self.airplanes_waiting_queue.get()
-                discharged_airplane.discharge(self.config.ROBOT_SCENARIOS[self.robots_number])
+                discharged_airplane.discharge(
+                    self.config.ROBOT_SCENARIOS[self.robots_number]
+                )
                 print(f"Airplane {discharged_airplane.id} discharged.")
                 self.airplanes_waiting_queue.task_done()
 
-    
     def launch_operation(self):
         """Launches the operation of the airport for a given time."""
         thread_airplane = threading.Thread(target=self._add_airplane, daemon=True)
-        thread_discharge = threading.Thread(target=self._discharge_airplanes, daemon=True)
+        thread_discharge = threading.Thread(
+            target=self._discharge_airplanes, daemon=True
+        )
 
         thread_airplane.start()
         thread_discharge.start()
 
         self.airplanes_waiting_queue.join()
         print(f"Airport {self.id} operation completed.")
-        
