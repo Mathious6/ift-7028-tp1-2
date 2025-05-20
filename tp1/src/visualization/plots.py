@@ -198,3 +198,106 @@ class SimulationPlots:
         plt.legend()
         plt.savefig("queue_mean_length.png")
         plt.close()
+
+    @staticmethod
+    def plot_waiting_time(
+        scenarios: dict[int, list], simulation_duration: int, window_size: int = 600
+    ) -> None:
+        """
+        Plot the waiting time of planes that completed service in each time window.
+        - scenarios (dict[int, list]): Dictionary mapping scenario number to list of AirPlane objects
+        - simulation_duration (int): Total duration of simulation in minutes
+        - window_size (int): Size of time windows in minutes for sampling
+        """
+        plt.figure(figsize=(20, 5))
+
+        time_windows = range(0, simulation_duration, window_size)
+
+        for scenario_num, planes in scenarios.items():
+            waiting_times = []
+
+            for window_start in time_windows:
+                window_end = window_start + window_size
+                window_waiting_times = [
+                    plane.waiting_time
+                    for plane in planes
+                    if (
+                        plane.service_end_time is not None
+                        and window_start <= plane.service_end_time < window_end
+                        and plane.waiting_time is not None
+                    )
+                ]
+
+                avg_waiting_time = (
+                    sum(window_waiting_times) / len(window_waiting_times)
+                    if window_waiting_times
+                    else 0
+                )
+                waiting_times.append(avg_waiting_time)
+
+            plt.plot(
+                time_windows,
+                waiting_times,
+                label=f"{scenario_num} robots",
+                marker=".",
+                markersize=4,
+            )
+
+        plt.title("Average Waiting Time per Time Window")
+        plt.xlabel("Time (minutes)")
+        plt.ylabel(f"Average waiting time (minutes) per {window_size} minutes")
+        plt.grid(True, linestyle="--", alpha=0.7)
+        plt.legend()
+        plt.savefig("waiting_time.png")
+        plt.close()
+
+    @staticmethod
+    def plot_mean_waiting_time(
+        scenarios: dict[int, list], simulation_duration: int, window_size: int = 600
+    ) -> None:
+        """
+        Plot the mean waiting time from the start of simulation up to each time point.
+        - scenarios (dict[int, list]): Dictionary mapping scenario number to list of AirPlane objects
+        - simulation_duration (int): Total duration of simulation in minutes
+        - window_size (int): Size of time windows in minutes for sampling
+        """
+        plt.figure(figsize=(20, 5))
+
+        time_windows = range(0, simulation_duration, window_size)
+
+        for scenario_num, planes in scenarios.items():
+            mean_waiting_times = []
+
+            for window_end in time_windows:
+                completed_planes = [
+                    plane.waiting_time
+                    for plane in planes
+                    if (
+                        plane.service_end_time is not None
+                        and plane.service_end_time <= window_end
+                        and plane.waiting_time is not None
+                    )
+                ]
+
+                mean_waiting = (
+                    sum(completed_planes) / len(completed_planes)
+                    if completed_planes
+                    else 0
+                )
+                mean_waiting_times.append(mean_waiting)
+
+            plt.plot(
+                time_windows,
+                mean_waiting_times,
+                label=f"{scenario_num} robots",
+                marker=".",
+                markersize=4,
+            )
+
+        plt.title("Mean Waiting Time Over Time (Cumulative Average)")
+        plt.xlabel("Time (minutes)")
+        plt.ylabel("Mean waiting time (minutes)")
+        plt.grid(True, linestyle="--", alpha=0.7)
+        plt.legend()
+        plt.savefig("waiting_time_mean.png")
+        plt.close()
