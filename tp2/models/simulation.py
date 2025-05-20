@@ -15,6 +15,7 @@ class Simulation:
         for robots_count in self.config.ROBOTs_MEAN_UNLOADING_TIMES.keys():
             self._run_scenario(robots_count)
 
+    def _run_scenario(self, robots_count: int) -> None:
         airport: Airport = Airport(self.config, robots_count)
         airport.manage_operations()
 

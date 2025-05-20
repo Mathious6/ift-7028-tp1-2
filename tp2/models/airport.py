@@ -1,6 +1,6 @@
 from simpy import Environment, Resource
 
-from random import expovariate
+from random import expovariate, seed
 from typing import Generator
 
 from config.simulation_config import SimulationConfig
@@ -10,6 +10,7 @@ class Airport:
 
     def __init__(self, config: SimulationConfig, robots_count: int) -> None:
         self.config: SimulationConfig = config
+        seed(self.config.RANDOM_SEED)
         self.env: Environment = Environment()
         self.robots: Resource = Resource(self.env)
 
