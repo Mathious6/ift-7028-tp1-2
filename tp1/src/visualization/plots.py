@@ -4,21 +4,6 @@ import matplotlib.pyplot as plt
 
 class SimulationPlots:
     @staticmethod
-    def plot_warmup_period(metrics: dict, scenario: int) -> None:
-        """Plot metrics to determine warmup period."""
-        pass
-
-    @staticmethod
-    def plot_confidence_intervals(results: dict) -> None:
-        """Plot confidence intervals for all scenarios."""
-        pass
-
-    @staticmethod
-    def plot_comparison_scenarios(results: dict) -> None:
-        """Plot comparison between different scenarios."""
-        pass
-
-    @staticmethod
     def plot_mean_unloaded_planes(
         scenarios: dict[int, list[AirPlane]], simulation_duration: int, window_size: int
     ) -> None:
@@ -69,20 +54,10 @@ class SimulationPlots:
         time_windows = range(0, simulation_duration, window_size)
 
         for scenario_num, planes in scenarios.items():
-            mean_queue_lengths = []
-            total_queue_time = 0
-
-            for window_end in time_windows:
-                total_queue_time = sum(
-                    min(window_end, plane.service_start_time or window_end)
-                    - plane.queue_entry_time
-                    for plane in planes
-                    if plane.queue_entry_time is not None
-                    and plane.queue_entry_time <= window_end
-                )
-
-                mean_queue = total_queue_time / window_end if window_end > 0 else 0
-                mean_queue_lengths.append(mean_queue)
+            mean_queue_lengths = [
+                AirPlane.calculate_mean_queue_length(planes, window_end)
+                for window_end in time_windows
+            ]
 
             plt.plot(
                 time_windows,

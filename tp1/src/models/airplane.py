@@ -50,3 +50,18 @@ class AirPlane:
         planes_unloaded = cls.count_unloaded_by_time(planes, time)
         windows_elapsed = time / window_size
         return planes_unloaded / windows_elapsed if windows_elapsed > 0 else 0
+
+    @classmethod
+    def calculate_queue_time_at_time(cls, planes: list["AirPlane"], time: int) -> float:
+        """Calculate the total queue time for all planes up to a given time."""
+        return sum(
+            min(time, plane.service_start_time or time) - plane.queue_entry_time
+            for plane in planes
+            if plane.queue_entry_time is not None and plane.queue_entry_time <= time
+        )
+
+    @classmethod
+    def calculate_mean_queue_length(cls, planes: list["AirPlane"], time: int) -> float:
+        """Calculate the mean queue length up to a given time."""
+        total_queue_time = cls.calculate_queue_time_at_time(planes, time)
+        return total_queue_time / time if time > 0 else 0
