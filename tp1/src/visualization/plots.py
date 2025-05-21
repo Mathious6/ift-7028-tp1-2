@@ -126,25 +126,10 @@ class SimulationPlots:
         time_windows = range(0, simulation_duration, window_size)
 
         for scenario_num, planes in scenarios.items():
-            mean_utilization_rates = []
-
-            for window_end in time_windows:
-                total_service_time = sum(
-                    min(window_end, plane.service_end_time or window_end)
-                    - plane.service_start_time
-                    for plane in planes
-                    if (
-                        plane.service_start_time is not None
-                        and plane.service_start_time <= window_end
-                    )
-                )
-
-                total_robot_minutes = total_service_time * scenario_num
-                elapsed_minutes = window_end * scenario_num
-                mean_utilization = (
-                    total_robot_minutes / elapsed_minutes if elapsed_minutes > 0 else 0
-                )
-                mean_utilization_rates.append(mean_utilization)
+            mean_utilization_rates = [
+                AirPlane.calculate_mean_robot_utilization(planes, window_end, scenario_num)
+                for window_end in time_windows
+            ]
 
             plt.plot(
                 time_windows,
