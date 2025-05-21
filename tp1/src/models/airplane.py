@@ -32,3 +32,21 @@ class AirPlane:
     def service_time(self) -> float:
         """Calculate the time the plane spent being served."""
         return self.service_end_time - self.service_start_time
+
+    def is_unloaded_by(self, time: int) -> bool:
+        """Check if the plane is unloaded by a given time."""
+        return self.service_end_time is not None and self.service_end_time <= time
+
+    @classmethod
+    def count_unloaded_by_time(cls, planes: list["AirPlane"], time: int) -> int:
+        """Count how many planes have been unloaded by a given time."""
+        return sum(1 for plane in planes if plane.is_unloaded_by(time=time))
+
+    @classmethod
+    def calculate_mean_unloaded_rate(
+        cls, planes: list["AirPlane"], time: int, window_size: int
+    ) -> float:
+        """Calculate the mean rate of planes unloaded up to a given time."""
+        planes_unloaded = cls.count_unloaded_by_time(planes, time)
+        windows_elapsed = time / window_size
+        return planes_unloaded / windows_elapsed if windows_elapsed > 0 else 0
