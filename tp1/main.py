@@ -5,7 +5,7 @@ from tp1.config.logger import setup_logger
 import time
 
 SIMULATION_DURATION = 40000
-WINDOW_SIZE = 500
+WINDOW_SIZE = 100
 
 
 def main():
@@ -55,18 +55,7 @@ def main():
 
         scenarios[num_robots] = airport.planes
 
-    SimulationPlots.plot_mean_unloaded_planes(
-        scenarios, SIMULATION_DURATION, WINDOW_SIZE
-    )
-    SimulationPlots.plot_mean_queue_length(
-        scenarios, SIMULATION_DURATION, WINDOW_SIZE
-    )
-    SimulationPlots.plot_mean_waiting_time(
-        scenarios, SIMULATION_DURATION, WINDOW_SIZE
-    )
-    SimulationPlots.plot_mean_robot_utilization(
-        scenarios, SIMULATION_DURATION, WINDOW_SIZE
-    )
+    SimulationPlots.plot_all_metrics(scenarios, SIMULATION_DURATION, WINDOW_SIZE)
 
 
 if __name__ == "__main__":

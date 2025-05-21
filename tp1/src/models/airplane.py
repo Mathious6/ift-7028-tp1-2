@@ -67,10 +67,13 @@ class AirPlane:
         return total_queue_time / time if time > 0 else 0
 
     @classmethod
-    def get_completed_planes_by_time(cls, planes: list["AirPlane"], time: int) -> list["AirPlane"]:
+    def get_completed_planes_by_time(
+        cls, planes: list["AirPlane"], time: int
+    ) -> list["AirPlane"]:
         """Get list of planes that have completed service by a given time."""
         return [
-            plane for plane in planes
+            plane
+            for plane in planes
             if plane.service_end_time is not None
             and plane.service_end_time <= time
             and plane.waiting_time is not None
@@ -82,7 +85,9 @@ class AirPlane:
         completed_planes = cls.get_completed_planes_by_time(planes, time)
         if not completed_planes:
             return 0
-        return sum(plane.waiting_time for plane in completed_planes) / len(completed_planes)
+        return sum(plane.waiting_time for plane in completed_planes) / len(
+            completed_planes
+        )
 
     @classmethod
     def calculate_total_service_time(cls, planes: list["AirPlane"], time: int) -> float:
@@ -100,4 +105,6 @@ class AirPlane:
         """Calculate the mean robot utilization rate up to a given time."""
         total_service_time = cls.calculate_total_service_time(planes, time)
         total_robot_minutes = time * num_robots
-        return total_service_time / total_robot_minutes if total_robot_minutes > 0 else 0
+        return (
+            total_service_time / total_robot_minutes if total_robot_minutes > 0 else 0
+        )
