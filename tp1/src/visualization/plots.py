@@ -90,25 +90,10 @@ class SimulationPlots:
         time_windows = range(0, simulation_duration, window_size)
 
         for scenario_num, planes in scenarios.items():
-            mean_waiting_times = []
-
-            for window_end in time_windows:
-                completed_planes = [
-                    plane.waiting_time
-                    for plane in planes
-                    if (
-                        plane.service_end_time is not None
-                        and plane.service_end_time <= window_end
-                        and plane.waiting_time is not None
-                    )
-                ]
-
-                mean_waiting = (
-                    sum(completed_planes) / len(completed_planes)
-                    if completed_planes
-                    else 0
-                )
-                mean_waiting_times.append(mean_waiting)
+            mean_waiting_times = [
+                AirPlane.calculate_mean_waiting_time(planes, window_end)
+                for window_end in time_windows
+            ]
 
             plt.plot(
                 time_windows,

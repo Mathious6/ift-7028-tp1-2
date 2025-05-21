@@ -61,9 +61,9 @@ def main():
     SimulationPlots.plot_mean_queue_length(
         scenarios, SIMULATION_DURATION, WINDOW_SIZE
     )
-    # SimulationPlots.plot_mean_waiting_time(
-    #     scenarios, SIMULATION_DURATION, WINDOW_SIZE
-    # )
+    SimulationPlots.plot_mean_waiting_time(
+        scenarios, SIMULATION_DURATION, WINDOW_SIZE
+    )
     # SimulationPlots.plot_mean_robot_utilization(
     #     scenarios, SIMULATION_DURATION, WINDOW_SIZE
     # )

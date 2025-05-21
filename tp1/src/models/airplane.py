@@ -65,3 +65,21 @@ class AirPlane:
         """Calculate the mean queue length up to a given time."""
         total_queue_time = cls.calculate_queue_time_at_time(planes, time)
         return total_queue_time / time if time > 0 else 0
+
+    @classmethod
+    def get_completed_planes_by_time(cls, planes: list["AirPlane"], time: int) -> list["AirPlane"]:
+        """Get list of planes that have completed service by a given time."""
+        return [
+            plane for plane in planes
+            if plane.service_end_time is not None
+            and plane.service_end_time <= time
+            and plane.waiting_time is not None
+        ]
+
+    @classmethod
+    def calculate_mean_waiting_time(cls, planes: list["AirPlane"], time: int) -> float:
+        """Calculate the mean waiting time for planes completed by a given time."""
+        completed_planes = cls.get_completed_planes_by_time(planes, time)
+        if not completed_planes:
+            return 0
+        return sum(plane.waiting_time for plane in completed_planes) / len(completed_planes)
