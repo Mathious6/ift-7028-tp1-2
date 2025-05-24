@@ -43,9 +43,7 @@ class AirPlane:
         return sum(1 for plane in planes if plane.is_unloaded_by(time=time))
 
     @classmethod
-    def calculate_mean_unloaded_rate(
-        cls, planes: list["AirPlane"], time: int, window_size: int
-    ) -> float:
+    def calculate_mean_unloaded_rate(cls, planes: list["AirPlane"], time: int, window_size: int) -> float:
         """Calculate the mean rate of planes unloaded up to a given time."""
         planes_unloaded = cls.count_unloaded_by_time(planes, time)
         windows_elapsed = time / window_size
@@ -67,16 +65,12 @@ class AirPlane:
         return total_queue_time / time if time > 0 else 0
 
     @classmethod
-    def get_completed_planes_by_time(
-        cls, planes: list["AirPlane"], time: int
-    ) -> list["AirPlane"]:
+    def get_completed_planes_by_time(cls, planes: list["AirPlane"], time: int) -> list["AirPlane"]:
         """Get list of planes that have completed service by a given time."""
         return [
             plane
             for plane in planes
-            if plane.service_end_time is not None
-            and plane.service_end_time <= time
-            and plane.waiting_time is not None
+            if plane.service_end_time is not None and plane.service_end_time <= time and plane.waiting_time is not None
         ]
 
     @classmethod
