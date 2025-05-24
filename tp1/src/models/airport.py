@@ -69,13 +69,7 @@ class Airport:
         service_time = self.processing_time.generate()
         service_end_time = current_time + service_time
 
-        self.simulator.schedule(
-            Event(
-                time=service_end_time,
-                type=EventType.END_LOADING,
-                data=self.current_plane,
-            )
-        )
+        self.simulator.schedule(Event(time=service_end_time, type=EventType.END_LOADING, data=self.current_plane))
         logger.debug(f"Time {current_time:.1f}: Plane {self.current_plane.id:04d} served \t[delay: {service_time: .1f}m]")
 
     def finish_serving_plane(self, current_time: float) -> None:
@@ -123,7 +117,6 @@ class Airport:
 
     def can_start_service(self) -> bool:
         """Check if we can start serving a new plane."""
-        return self.current_plane is None and self.get_queue_length() > 0
         return self.current_plane is None and self.get_queue_length() > 0
 
 
