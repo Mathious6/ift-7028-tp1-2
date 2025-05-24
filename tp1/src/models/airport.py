@@ -24,7 +24,9 @@ class Airport:
         self.processing_time = ExponentialDistribution(mean=self.config.ROBOT_SCENARIOS[num_robots], seed=self.config.RANDOM_SEED)
 
         self.simulator = Simulator()
-        self.simulator.register_handler(EventType.PLANE_ARRIVAL, self.handle_plane_arrival)
+        self.simulator.register_handler(
+            EventType.PLANE_ARRIVAL, self.handle_plane_arrival
+        )
         self.simulator.register_handler(EventType.END_LOADING, self.handle_end_loading)
 
     def handle_plane_arrival(self, event: Event) -> None:
@@ -33,7 +35,9 @@ class Airport:
 
         plane = self.add_plane(current_time)
         self.schedule_next_arrival(current_time)
-        logger.debug(f"Time {current_time:.1f}: Plane {plane.id:04d} arrived\t[queue: {self.get_queue_length()}]")
+        logger.debug(
+            f"Time {current_time:.1f}: Plane {plane.id:04d} arrived\t[queue: {self.get_queue_length()}]"
+        )
 
         if self.can_start_service():
             self.start_serving_plane(current_time)
@@ -42,7 +46,9 @@ class Airport:
         """Handle an end of loading event."""
         current_time = event.time
 
-        logger.debug(f"Time {current_time:.1f}: Plane {event.data.id:04d} finished\t[queue: {self.get_queue_length()}]")
+        logger.debug(
+            f"Time {current_time:.1f}: Plane {event.data.id:04d} finished\t[queue: {self.get_queue_length()}]"
+        )
         self.finish_serving_plane(current_time)
 
     def add_plane(self, arrival_time: float) -> AirPlane:
@@ -55,7 +61,9 @@ class Airport:
     def schedule_next_arrival(self, current_time: float) -> None:
         """Schedule the next plane arrival."""
         next_arrival_time = current_time + self.inter_arrival_time.generate()
-        self.simulator.schedule(Event(time=next_arrival_time, type=EventType.PLANE_ARRIVAL))
+        self.simulator.schedule(
+            Event(time=next_arrival_time, type=EventType.PLANE_ARRIVAL)
+        )
 
     def start_serving_plane(self, current_time: float) -> None:
         """Start serving the next plane in queue."""
@@ -69,8 +77,16 @@ class Airport:
         service_time = self.processing_time.generate()
         service_end_time = current_time + service_time
 
-        self.simulator.schedule(Event(time=service_end_time, type=EventType.END_LOADING, data=self.current_plane))
-        logger.debug(f"Time {current_time:.1f}: Plane {self.current_plane.id:04d} served \t[delay: {service_time: .1f}m]")
+        self.simulator.schedule(
+            Event(
+                time=service_end_time,
+                type=EventType.END_LOADING,
+                data=self.current_plane,
+            )
+        )
+        logger.debug(
+            f"Time {current_time:.1f}: Plane {self.current_plane.id:04d} served \t[delay: {service_time: .1f}m]"
+        )
 
     def finish_serving_plane(self, current_time: float) -> None:
         """Finish serving the current plane."""
@@ -111,12 +127,15 @@ class Airport:
         if not self.planes or current_time == 0:
             return 0.0
 
-        unloaded_planes = sum(1 for p in self.planes if p.status == PlaneStatus.UNLOADED)
+        unloaded_planes = sum(
+            1 for p in self.planes if p.status == PlaneStatus.UNLOADED
+        )
         hours = current_time / 60.0
         return unloaded_planes / hours if hours > 0 else 0.0
 
     def can_start_service(self) -> bool:
         """Check if we can start serving a new plane."""
+        return self.current_plane is None and self.get_queue_length() > 0
         return self.current_plane is None and self.get_queue_length() > 0
 
 
@@ -135,7 +154,13 @@ if __name__ == "__main__":
     root_logger.info(f"Simulation results w {NUM_ROBOTS} robots:")
     root_logger.info(f"> Simulation time: {current_time:.1f} minutes")
     root_logger.info(f"> Total planes: {len(airport.planes)}")
-    root_logger.info(f"> Planes unloaded: {sum(1 for p in airport.planes if p.status == PlaneStatus.UNLOADED)}")
+    root_logger.info(
+        f"> Planes unloaded: {sum(1 for p in airport.planes if p.status == PlaneStatus.UNLOADED)}"
+    )
     root_logger.info(f"> Current queue length: {airport.get_queue_length()}")
-    root_logger.info(f"> Robot utilization: {airport.get_robot_utilization(current_time):.2%}")
-    root_logger.info(f"> Planes per hour: {airport.get_planes_per_hour(current_time):.1f}")
+    root_logger.info(
+        f"> Robot utilization: {airport.get_robot_utilization(current_time):.2%}"
+    )
+    root_logger.info(
+        f"> Planes per hour: {airport.get_planes_per_hour(current_time):.1f}"
+    )
