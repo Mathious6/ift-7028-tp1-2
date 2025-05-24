@@ -99,12 +99,7 @@ class AirPlane:
         )
 
     @classmethod
-    def calculate_mean_robot_utilization(
-        cls, planes: list["AirPlane"], time: int, num_robots: int
-    ) -> float:
+    def calculate_mean_robot_utilization(cls, planes: list["AirPlane"], time: int) -> float:
         """Calculate the mean robot utilization rate up to a given time."""
         total_service_time = cls.calculate_total_service_time(planes, time)
-        total_robot_minutes = time * num_robots
-        return (
-            total_service_time / total_robot_minutes if total_robot_minutes > 0 else 0
-        )
+        return total_service_time / time if time > 0 else 0

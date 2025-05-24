@@ -11,10 +11,10 @@ class SimulationConfig:
     RANDOM_SEED: ClassVar[int] = 42
     ROBOT_SCENARIOS: ClassVar[Dict[int, float]] = {
         2: 9.0,
-        3: 7.0,
-        5: 5.5,
-        8: 4.5,
-        12: 4.2,
+        # 3: 7.0,
+        # 5: 5.5,
+        # 8: 4.5,
+        # 12: 4.2,
     }
 
     def __init__(self, num_robots: int):

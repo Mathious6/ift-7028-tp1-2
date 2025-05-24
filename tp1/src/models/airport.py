@@ -119,8 +119,7 @@ class Airport:
             return 0.0
 
         total_busy_time = sum(
-            (p.service_end_time or current_time)
-            - (p.service_start_time or current_time)
+            (p.service_end_time or current_time) - (p.service_start_time or current_time)
             for p in self.planes
             if p.service_start_time is not None
         )

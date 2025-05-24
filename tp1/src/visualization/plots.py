@@ -109,9 +109,7 @@ class SimulationPlots:
 
         for scenario_num, planes in scenarios.items():
             mean_utilization_rates = [
-                AirPlane.calculate_mean_robot_utilization(
-                    planes, window_end, scenario_num
-                )
+                AirPlane.calculate_mean_robot_utilization(planes, window_end)
                 for window_end in time_windows
             ]
             ax.plot(
