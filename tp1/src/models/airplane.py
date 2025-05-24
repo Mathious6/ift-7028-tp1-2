@@ -85,9 +85,7 @@ class AirPlane:
         completed_planes = cls.get_completed_planes_by_time(planes, time)
         if not completed_planes:
             return 0
-        return sum(plane.waiting_time for plane in completed_planes) / len(
-            completed_planes
-        )
+        return sum(plane.waiting_time for plane in completed_planes) / len(completed_planes)
 
     @classmethod
     def calculate_total_service_time(cls, planes: list["AirPlane"], time: int) -> float:

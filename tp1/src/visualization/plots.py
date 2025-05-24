@@ -19,13 +19,7 @@ class SimulationPlots:
                 AirPlane.calculate_mean_unloaded_rate(planes, window_end, window_size)
                 for window_end in time_windows
             ]
-            ax.plot(
-                time_windows,
-                mean_planes,
-                label=f"{scenario_num} robots",
-                marker=".",
-                markersize=4,
-            )
+            ax.plot(time_windows, mean_planes, label=f"{scenario_num} robots", marker=".", markersize=4)
 
         ax.set_title("Mean Number of Planes Unloaded (Cumulative Average)")
         ax.set_xlabel("Time (minutes)")
@@ -50,13 +44,7 @@ class SimulationPlots:
                 AirPlane.calculate_mean_queue_length(planes, window_end)
                 for window_end in time_windows
             ]
-            ax.plot(
-                time_windows,
-                mean_queue_lengths,
-                label=f"{scenario_num} robots",
-                marker=".",
-                markersize=4,
-            )
+            ax.plot(time_windows, mean_queue_lengths, label=f"{scenario_num} robots", marker=".", markersize=4)
 
         ax.set_title("Mean Queue Length Over Time (Cumulative Average)")
         ax.set_xlabel("Time (minutes)")
@@ -81,13 +69,7 @@ class SimulationPlots:
                 AirPlane.calculate_mean_waiting_time(planes, window_end)
                 for window_end in time_windows
             ]
-            ax.plot(
-                time_windows,
-                mean_waiting_times,
-                label=f"{scenario_num} robots",
-                marker=".",
-                markersize=4,
-            )
+            ax.plot(time_windows, mean_waiting_times, label=f"{scenario_num} robots", marker=".", markersize=4)
 
         ax.set_title("Mean Waiting Time Over Time (Cumulative Average)")
         ax.set_xlabel("Time (minutes)")
@@ -112,13 +94,7 @@ class SimulationPlots:
                 AirPlane.calculate_mean_robot_utilization(planes, window_end)
                 for window_end in time_windows
             ]
-            ax.plot(
-                time_windows,
-                mean_utilization_rates,
-                label=f"{scenario_num} robots",
-                marker=".",
-                markersize=4,
-            )
+            ax.plot(time_windows, mean_utilization_rates, label=f"{scenario_num} robots", marker=".", markersize=4)
 
         ax.set_title("Mean Robot Utilization Rate Over Time (Cumulative Average)")
         ax.set_xlabel("Time (minutes)")
@@ -140,36 +116,17 @@ class SimulationPlots:
         - simulation_duration (int): Total duration of simulation in minutes
         - window_size (int): Size of time windows in minutes for sampling
         """
-        _, ax_unloaded = SimulationPlots.plot_mean_unloaded_planes(
-            scenarios, simulation_duration, window_size
-        )
-        _, ax_queue = SimulationPlots.plot_mean_queue_length(
-            scenarios, simulation_duration, window_size
-        )
-        _, ax_waiting = SimulationPlots.plot_mean_waiting_time(
-            scenarios, simulation_duration, window_size
-        )
-        _, ax_utilization = SimulationPlots.plot_mean_robot_utilization(
-            scenarios, simulation_duration, window_size
-        )
+        _, ax_unloaded = SimulationPlots.plot_mean_unloaded_planes(scenarios, simulation_duration, window_size)
+        _, ax_queue = SimulationPlots.plot_mean_queue_length(scenarios, simulation_duration, window_size)
+        _, ax_waiting = SimulationPlots.plot_mean_waiting_time(scenarios, simulation_duration, window_size)
+        _, ax_utilization = SimulationPlots.plot_mean_robot_utilization(scenarios, simulation_duration, window_size)
 
         _, axes = plt.subplots(4, 1, figsize=(15, 20))
 
         # Copy data from individual plots to subplots
-        for ax_src, ax_dst in [
-            (ax_unloaded, axes[0]),
-            (ax_queue, axes[1]),
-            (ax_waiting, axes[2]),
-            (ax_utilization, axes[3]),
-        ]:
+        for ax_src, ax_dst in [(ax_unloaded, axes[0]), (ax_queue, axes[1]), (ax_waiting, axes[2]), (ax_utilization, axes[3])]:
             for line in ax_src.get_lines():
-                ax_dst.plot(
-                    line.get_xdata(),
-                    line.get_ydata(),
-                    label=line.get_label(),
-                    marker=".",
-                    markersize=4,
-                )
+                ax_dst.plot(line.get_xdata(), line.get_ydata(), label=line.get_label(), marker=".", markersize=4)
 
             ax_dst.set_title(ax_src.get_title())
             ax_dst.set_xlabel(ax_src.get_xlabel())
