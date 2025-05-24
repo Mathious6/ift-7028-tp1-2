@@ -58,27 +58,17 @@ class Airport:
     def _robots_unload_plane(self) -> Generator:
         robots_busy_start_time = self.env.now
 
-        yield self.env.timeout(
-            expovariate(1 / self.config.ROBOTs_MEAN_UNLOADING_TIMES[self.robots_count])
-        )
+        yield self.env.timeout(expovariate(1 / self.config.ROBOTs_MEAN_UNLOADING_TIMES[self.robots_count]))
         self.planes_unloaded_count += 1
 
         robots_busy_end_time = self.env.now
         self.robots_busy_time += robots_busy_end_time - robots_busy_start_time
 
     def get_performance_statistics(self) -> dict:
-        planes_unloaded_hourly: float = self.planes_unloaded_count / (
-            self.config.SIMULATION_TIME / 60
-        )
-        mean_queue_time: float = (
-            self.cumulative_queue_time / self.planes_unloaded_count
-            if self.planes_unloaded_count > 0
-            else 0
-        )
+        planes_unloaded_hourly: float = self.planes_unloaded_count / (self.config.SIMULATION_TIME / 60)
+        mean_queue_time: float = self.cumulative_queue_time / self.planes_unloaded_count if self.planes_unloaded_count > 0 else 0
         robot_activity_ratio: float = (
-            (self.robots_busy_time / self.config.SIMULATION_TIME)
-            if self.config.SIMULATION_TIME > 0
-            else 0
+            (self.robots_busy_time / self.config.SIMULATION_TIME) if self.config.SIMULATION_TIME > 0 else 0
         )
 
         return {
