@@ -1,10 +1,10 @@
 from typing import List, Optional
-from tp1.src.random.distributions import ExponentialDistribution
-from tp1.src.models.airplane import AirPlane, PlaneStatus
-from tp1.config.simulation import SimulationConfig
-from tp1.config.logger import setup_logger
-from tp1.src.simulation.events import Event, EventType
-from tp1.src.simulation.simulator import Simulator
+from src.random.distributions import ExponentialDistribution
+from src.models.airplane import AirPlane, PlaneStatus
+from config.simulation import SimulationConfig
+from config.logger import setup_logger
+from src.simulation.events import Event, EventType
+from src.simulation.simulator import Simulator
 
 logger = setup_logger("airport")
 

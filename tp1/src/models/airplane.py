@@ -58,11 +58,23 @@ class AirPlane:
             if plane.queue_entry_time is not None and plane.queue_entry_time <= time
         )
 
+
     @classmethod
-    def calculate_mean_queue_length(cls, planes: list["AirPlane"], time: int) -> float:
-        """Calculate the mean queue length up to a given time."""
-        total_queue_time = cls.calculate_queue_time_at_time(planes, time)
-        return total_queue_time / time if time > 0 else 0
+    def calculate_cumulative_mean_queue_length(cls, planes: list["AirPlane"], simulation_duration: int, windows_size: int) -> list[float]:
+        """Calculate the cumulative mean queue length up to a given time."""
+        # sum the queue length at each sampling point (e.g., every minute) and divide by the number of sampling points so far.
+        queue_lengths = [
+            sum(
+                1 for plane in planes if plane.queue_entry_time is not None and plane.queue_entry_time <= time and plane.service_start_time is None
+            )
+            for time in range(0, simulation_duration)
+        ]
+        # Calculate the cumulative mean queue length
+        cumulative_mean_queue_lengths = [
+            sum(queue_lengths[:i + 1]) / ((i + 1)) if i > 0 else queue_lengths[i]
+            for i in range(len(queue_lengths))
+        ]
+        return cumulative_mean_queue_lengths[::windows_size]
 
     @classmethod
     def get_completed_planes_by_time(cls, planes: list["AirPlane"], time: int) -> list["AirPlane"]:

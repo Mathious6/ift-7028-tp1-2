@@ -1,4 +1,4 @@
-from tp1.src.models.airplane import AirPlane
+from src.models.airplane import AirPlane
 import matplotlib.pyplot as plt
 
 
@@ -37,7 +37,7 @@ class SimulationPlots:
         time_windows = range(0, simulation_duration, window_size)
 
         for scenario_num, planes in scenarios.items():
-            mean_queue_lengths = [AirPlane.calculate_mean_queue_length(planes, window_end) for window_end in time_windows]
+            mean_queue_lengths = AirPlane.calculate_cumulative_mean_queue_length(planes, simulation_duration, window_size)
             ax.plot(time_windows, mean_queue_lengths, label=f"{scenario_num} robots", marker=".", markersize=4)
 
         ax.set_title("Mean Queue Length Over Time (Cumulative Average)")
@@ -129,7 +129,7 @@ class SimulationPlots:
                 ax_dst.set_ylim(0, 1)
 
         plt.tight_layout()
-        plt.savefig("all_metrics.png", dpi=300, bbox_inches="tight")
+        plt.savefig("all_metrics_tp1.png", dpi=300, bbox_inches="tight")
         plt.close()
 
         plt.close(ax_unloaded.figure)

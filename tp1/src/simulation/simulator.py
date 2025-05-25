@@ -1,4 +1,4 @@
-from tp1.src.simulation.events import Event, EventQueue, EventType
+from src.simulation.events import Event, EventQueue, EventType
 from typing import Callable
 
 

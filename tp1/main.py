@@ -1,8 +1,8 @@
-from tp1.src.models.airport import Airport
-from tp1.src.models.airplane import AirPlane
-from tp1.config.simulation import SimulationConfig
-from tp1.src.visualization.plots import SimulationPlots
-from tp1.config.logger import setup_logger
+from src.models.airport import Airport
+from src.models.airplane import AirPlane
+from config.simulation import SimulationConfig
+from src.visualization.plots import SimulationPlots
+from config.logger import setup_logger
 import time
 
 SIMULATION_DURATION = 40000
