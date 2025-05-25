@@ -6,11 +6,11 @@ from src.simulation.analyzer import SimulationAnalyzer
 from config.logger import setup_logger
 import time
 
-RUN_VISUALIZATION = False
+RUN_VISUALIZATION = True
 SIMULATION_DURATION = 40000
 WINDOW_SIZE = 60
 NUM_REPLICATIONS = 50
-WARMUP_PERIOD = 0
+WARMUP_PERIOD = 20000
 
 
 def main():
@@ -35,8 +35,8 @@ def main():
             airport.run_simulation(SIMULATION_DURATION)
 
             current_time = airport.simulator.get_current_time()
-            unloaded_planes = AirPlane.count_unloaded_by_time(airport.planes, current_time)
-            queue_waiting_time = AirPlane.calculate_mean_waiting_time(airport.planes, current_time)
+            unloaded_planes = AirPlane.count_unloaded_by_time(airport.planes, 0, current_time)
+            queue_waiting_time = AirPlane.calculate_mean_waiting_time(airport.planes, 0, current_time)
 
             root_logger.info(f"🤖 Results for {num_robots} robots (single run):")
             root_logger.info(f"Simulation time: {current_time:.1f} minutes")

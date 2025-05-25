@@ -34,13 +34,13 @@ class SimulationAnalyzer:
     def _calculate_scenario_statistics(self, airport: Airport) -> Dict:
         """Calculate statistics for a single replication after warmup period."""
         post_warmup_planes = [p for p in airport.planes if p.queue_entry_time >= self.warmup_period]
-        simulation_duration = airport.simulator.get_current_time() - self.warmup_period
+        simulation_end_time = airport.simulator.get_current_time()
 
         return {
-            "planes_per_hour": AirPlane.calculate_mean_unloaded_rate(post_warmup_planes, simulation_duration, 60),
-            "mean_queue_length": AirPlane.calculate_mean_queue_length(post_warmup_planes, simulation_duration),
-            "mean_waiting_time": AirPlane.calculate_mean_waiting_time(post_warmup_planes, simulation_duration),
-            "robot_utilization": AirPlane.calculate_mean_robot_utilization(post_warmup_planes, simulation_duration),
+            "planes_per_hour": AirPlane.calculate_mean_unloaded_rate(post_warmup_planes, self.warmup_period, simulation_end_time, 60),
+            "mean_queue_length": AirPlane.calculate_mean_queue_length(post_warmup_planes, self.warmup_period, simulation_end_time),
+            "mean_waiting_time": AirPlane.calculate_mean_waiting_time(post_warmup_planes, self.warmup_period, simulation_end_time),
+            "robot_utilization": AirPlane.calculate_mean_robot_utilization(post_warmup_planes, self.warmup_period, simulation_end_time),
         }
 
     def calculate_confidence_intervals(self, replication_stats: List[Dict]) -> Dict[str, Tuple[float, float, float]]:
