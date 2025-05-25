@@ -23,6 +23,9 @@ class AirPlane:
     service_start_time: Optional[float] = None
     service_end_time: Optional[float] = None
 
+    # QUEUE:
+    queue_length: int = 0
+
     @property
     def waiting_time(self) -> float:
         """Calculate the time the plane spent waiting in queue."""
@@ -50,31 +53,12 @@ class AirPlane:
         return planes_unloaded / windows_elapsed if windows_elapsed > 0 else 0
 
     @classmethod
-    def calculate_queue_time_at_time(cls, planes: list["AirPlane"], time: int) -> float:
-        """Calculate the total queue time for all planes up to a given time."""
-        return sum(
-            min(time, plane.service_start_time or time) - plane.queue_entry_time
-            for plane in planes
-            if plane.queue_entry_time is not None and plane.queue_entry_time <= time
-        )
-
-
-    @classmethod
-    def calculate_cumulative_mean_queue_length(cls, planes: list["AirPlane"], simulation_duration: int, windows_size: int) -> list[float]:
-        """Calculate the cumulative mean queue length up to a given time."""
-        # sum the queue length at each sampling point (e.g., every minute) and divide by the number of sampling points so far.
-        queue_lengths = [
-            sum(
-                1 for plane in planes if plane.queue_entry_time is not None and plane.queue_entry_time <= time and plane.service_start_time is None
-            )
-            for time in range(0, simulation_duration)
-        ]
-        # Calculate the cumulative mean queue length
-        cumulative_mean_queue_lengths = [
-            sum(queue_lengths[:i + 1]) / ((i + 1)) if i > 0 else queue_lengths[i]
-            for i in range(len(queue_lengths))
-        ]
-        return cumulative_mean_queue_lengths[::windows_size]
+    def calculate_mean_queue_length(cls, planes: list["AirPlane"], time: int) -> float:
+        """Calculate the mean number of planes in queue up to a given time."""
+        arrived_planes = [p for p in planes if p.queue_entry_time <= time]
+        if not arrived_planes:
+            return 0
+        return sum(p.queue_length for p in arrived_planes) / len(arrived_planes)
 
     @classmethod
     def get_completed_planes_by_time(cls, planes: list["AirPlane"], time: int) -> list["AirPlane"]:

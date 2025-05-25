@@ -12,7 +12,7 @@ class SimulationPlots:
         Returns the figure and axes for further customization or combination with other plots.
         """
         fig, ax = plt.subplots(figsize=(20, 5))
-        time_windows = range(0, simulation_duration, window_size)
+        time_windows = range(window_size, simulation_duration, window_size)
 
         for scenario_num, planes in scenarios.items():
             mean_planes = [AirPlane.calculate_mean_unloaded_rate(planes, window_end, window_size) for window_end in time_windows]
@@ -34,10 +34,10 @@ class SimulationPlots:
         Returns the figure and axes for further customization or combination with other plots.
         """
         fig, ax = plt.subplots(figsize=(20, 5))
-        time_windows = range(0, simulation_duration, window_size)
+        time_windows = range(window_size, simulation_duration, window_size)
 
         for scenario_num, planes in scenarios.items():
-            mean_queue_lengths = AirPlane.calculate_cumulative_mean_queue_length(planes, simulation_duration, window_size)
+            mean_queue_lengths = [AirPlane.calculate_mean_queue_length(planes, window_end) for window_end in time_windows]
             ax.plot(time_windows, mean_queue_lengths, label=f"{scenario_num} robots", marker=".", markersize=4)
 
         ax.set_title("Mean Queue Length Over Time (Cumulative Average)")
@@ -56,7 +56,7 @@ class SimulationPlots:
         Returns the figure and axes for further customization or combination with other plots.
         """
         fig, ax = plt.subplots(figsize=(20, 5))
-        time_windows = range(0, simulation_duration, window_size)
+        time_windows = range(window_size, simulation_duration, window_size)
 
         for scenario_num, planes in scenarios.items():
             mean_waiting_times = [AirPlane.calculate_mean_waiting_time(planes, window_end) for window_end in time_windows]
@@ -78,7 +78,7 @@ class SimulationPlots:
         Returns the figure and axes for further customization or combination with other plots.
         """
         fig, ax = plt.subplots(figsize=(20, 5))
-        time_windows = range(0, simulation_duration, window_size)
+        time_windows = range(window_size, simulation_duration, window_size)
 
         for scenario_num, planes in scenarios.items():
             mean_utilization_rates = [

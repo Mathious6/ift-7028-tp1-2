@@ -47,7 +47,7 @@ class Airport:
 
     def add_plane(self, arrival_time: float) -> AirPlane:
         """Add a new plane to the system."""
-        plane = AirPlane(id=len(self.planes), queue_entry_time=arrival_time)
+        plane = AirPlane(id=len(self.planes), queue_entry_time=arrival_time, queue_length=len(self.queue))
         self.planes.append(plane)
         self.queue.append(plane)
         return plane
