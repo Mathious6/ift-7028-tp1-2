@@ -95,4 +95,4 @@ class SimulationAnalyzer:
             print()
 
         print("=" * 100)
-        print("Note: Values shown as mean ± half-width of 95% confidence interval")
+        print("Note: Values shown as mean ± half-width of 95% confidence interval\n")

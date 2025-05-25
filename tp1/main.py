@@ -9,7 +9,7 @@ import time
 RUN_VISUALIZATION = False
 SIMULATION_DURATION = 40000
 WINDOW_SIZE = 60
-NUM_REPLICATIONS = 30
+NUM_REPLICATIONS = 50
 WARMUP_PERIOD = 0
 
 
@@ -26,7 +26,7 @@ def main():
     analyzer.print_results_table(results)
 
     if RUN_VISUALIZATION:
-        root_logger.info("\nRunning single simulation for visualization...")
+        root_logger.info("Running single simulation for visualization...")
         scenarios = {}
         for num_robots in SimulationConfig.ROBOT_SCENARIOS.keys():
             start_time = time.time()
@@ -35,7 +35,7 @@ def main():
             airport.run_simulation(SIMULATION_DURATION)
 
             current_time = airport.simulator.get_current_time()
-            unloaded_planes = AirPlane.count_unloaded_by_time(airport.planes, 0, current_time)
+            unloaded_planes = AirPlane.count_unloaded_by_time(airport.planes, current_time)
             queue_waiting_time = AirPlane.calculate_mean_waiting_time(airport.planes, current_time)
 
             root_logger.info(f"🤖 Results for {num_robots} robots (single run):")
@@ -50,7 +50,7 @@ def main():
 
             scenarios[num_robots] = airport.planes
 
-        SimulationPlots.plot_all_metrics(scenarios, SIMULATION_DURATION, WINDOW_SIZE)
+        # SimulationPlots.plot_all_metrics(scenarios, SIMULATION_DURATION, WINDOW_SIZE)
 
 
 if __name__ == "__main__":
