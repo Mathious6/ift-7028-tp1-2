@@ -1,10 +1,10 @@
 from typing import List, Optional
-from tp1.src.random.distributions import ExponentialDistribution
-from tp1.src.models.airplane import AirPlane, PlaneStatus
-from tp1.config.simulation import SimulationConfig
-from tp1.config.logger import setup_logger
-from tp1.src.simulation.events import Event, EventType
-from tp1.src.simulation.simulator import Simulator
+from src.random.distributions import ExponentialDistribution
+from src.models.airplane import AirPlane, PlaneStatus
+from config.simulation import SimulationConfig
+from config.logger import setup_logger
+from src.simulation.events import Event, EventType
+from src.simulation.simulator import Simulator
 
 logger = setup_logger("airport")
 
@@ -47,7 +47,7 @@ class Airport:
 
     def add_plane(self, arrival_time: float) -> AirPlane:
         """Add a new plane to the system."""
-        plane = AirPlane(id=len(self.planes), queue_entry_time=arrival_time)
+        plane = AirPlane(id=len(self.planes), queue_entry_time=arrival_time, queue_length=len(self.queue))
         self.planes.append(plane)
         self.queue.append(plane)
         return plane
