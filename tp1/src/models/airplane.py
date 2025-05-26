@@ -66,9 +66,11 @@ class AirPlane:
         return [
             plane
             for plane in planes
-            if (plane.service_end_time is not None
+            if (
+                plane.service_end_time is not None
                 and start_time <= plane.service_end_time <= end_time
-                and plane.waiting_time is not None)
+                and plane.waiting_time is not None
+            )
         ]
 
     @classmethod
@@ -85,9 +87,11 @@ class AirPlane:
         return sum(
             min(end_time, plane.service_end_time or end_time) - max(start_time, plane.service_start_time or start_time)
             for plane in planes
-            if (plane.service_start_time is not None
+            if (
+                plane.service_start_time is not None
                 and plane.service_start_time <= end_time
-                and (plane.service_end_time is None or plane.service_end_time >= start_time))
+                and (plane.service_end_time is None or plane.service_end_time >= start_time)
+            )
         )
 
     @classmethod

@@ -37,10 +37,18 @@ class SimulationAnalyzer:
         simulation_end_time = airport.simulator.get_current_time()
 
         return {
-            "planes_per_hour": AirPlane.calculate_mean_unloaded_rate(post_warmup_planes, self.warmup_period, simulation_end_time, 60),
-            "mean_queue_length": AirPlane.calculate_mean_queue_length(post_warmup_planes, self.warmup_period, simulation_end_time),
-            "mean_waiting_time": AirPlane.calculate_mean_waiting_time(post_warmup_planes, self.warmup_period, simulation_end_time),
-            "robot_utilization": AirPlane.calculate_mean_robot_utilization(post_warmup_planes, self.warmup_period, simulation_end_time),
+            "planes_per_hour": AirPlane.calculate_mean_unloaded_rate(
+                post_warmup_planes, self.warmup_period, simulation_end_time, 60
+            ),
+            "mean_queue_length": AirPlane.calculate_mean_queue_length(
+                post_warmup_planes, self.warmup_period, simulation_end_time
+            ),
+            "mean_waiting_time": AirPlane.calculate_mean_waiting_time(
+                post_warmup_planes, self.warmup_period, simulation_end_time
+            ),
+            "robot_utilization": AirPlane.calculate_mean_robot_utilization(
+                post_warmup_planes, self.warmup_period, simulation_end_time
+            ),
         }
 
     def calculate_confidence_intervals(self, replication_stats: List[Dict]) -> Dict[str, Tuple[float, float, float]]:
@@ -52,7 +60,7 @@ class SimulationAnalyzer:
             values = [stats[metric] for stats in replication_stats]
             mean = np.mean(values)
             std_err = stats.sem(values)
-            ci = stats.t.interval(0.95, len(values)-1, loc=mean, scale=std_err)
+            ci = stats.t.interval(0.95, len(values) - 1, loc=mean, scale=std_err)
 
             results[metric] = (mean, ci[0], ci[1])
 

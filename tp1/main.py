@@ -50,7 +50,7 @@ def main():
 
             scenarios[num_robots] = airport.planes
 
-        # SimulationPlots.plot_all_metrics(scenarios, SIMULATION_DURATION, WINDOW_SIZE)
+        SimulationPlots.plot_all_metrics(scenarios, SIMULATION_DURATION, WINDOW_SIZE)
 
 
 if __name__ == "__main__":

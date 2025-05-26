@@ -80,21 +80,29 @@ class Airport:
             current_time = self._env.now
 
             if (current_time + 1) % 60 == 0:  # Every hour
-                self._planes_unloaded_hourly[current_time] = self._planes_unloaded_count / (current_time / 60) if current_time > 0 else 0
-            
+                self._planes_unloaded_hourly[current_time] = (
+                    self._planes_unloaded_count / (current_time / 60) if current_time > 0 else 0
+                )
+
             self._cumulative_robots_activity_ratio[current_time] = (
                 self._robots_busy_time / current_time if current_time > 0 else 0
             )
 
             self._cumulative_queue_length_sum += self._planes_queue_lenght
             self._queue_length_sample_count += 1
-            self._mean_queue_lenght_over_time[current_time] = self._cumulative_queue_length_sum / self._queue_length_sample_count if self._queue_length_sample_count > 0 else 0
+            self._mean_queue_lenght_over_time[current_time] = (
+                self._cumulative_queue_length_sum / self._queue_length_sample_count if self._queue_length_sample_count > 0 else 0
+            )
 
-            self._mean_queue_time_over_time[current_time] = self._cumulative_queue_time / self._planes_unloaded_count if self._planes_unloaded_count > 0 else 0
+            self._mean_queue_time_over_time[current_time] = (
+                self._cumulative_queue_time / self._planes_unloaded_count if self._planes_unloaded_count > 0 else 0
+            )
 
     def get_final_performance_statistics(self) -> dict:
         planes_unloaded_hourly: float = self._planes_unloaded_count / (self._config.SIMULATION_TIME / 60)
-        mean_queue_time: float = self._cumulative_queue_time / self._planes_unloaded_count if self._planes_unloaded_count > 0 else 0
+        mean_queue_time: float = (
+            self._cumulative_queue_time / self._planes_unloaded_count if self._planes_unloaded_count > 0 else 0
+        )
 
         return {
             "simulation_time": self._config.SIMULATION_TIME,
