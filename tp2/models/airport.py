@@ -66,7 +66,7 @@ class Airport:
     def _robots_unload_plane(self) -> Generator:
         robots_busy_start_time = self._env.now
 
-        yield self._env.timeout(expovariate(1 / self._config.ROBOTs_MEAN_UNLOADING_TIMES[self._robots_count]))
+        yield self._env.timeout(expovariate(1 / self._config.ROBOTS_MEAN_UNLOADING_TIMES[self._robots_count]))
         self._planes_unloaded_count += 1
 
         robots_busy_end_time = self._env.now

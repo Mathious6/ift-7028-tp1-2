@@ -6,6 +6,7 @@ scipy>=1.10.0
 
 # TP2 specific
 simpy>=4.1.1
+prettytable>=3.16.0
 
 # Development dependencies
 black>=23.0.0

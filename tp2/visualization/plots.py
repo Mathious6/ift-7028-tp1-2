@@ -16,7 +16,6 @@ class SimulationPlots:
         ax.set_xlabel("Time (minutes)")
         ax.set_ylabel(f"Mean planes unloaded per 60 minutes")
         ax.grid(True, linestyle="--", alpha=0.7)
-        # ax.legend()
         return fig, ax
 
     @staticmethod
@@ -33,7 +32,6 @@ class SimulationPlots:
         ax.set_xlabel("Time (minutes)")
         ax.set_ylabel(f"Mean number of planes in queue per minute")
         ax.grid(True, linestyle="--", alpha=0.7)
-        # ax.legend()
         return fig, ax
 
     @staticmethod
@@ -48,7 +46,6 @@ class SimulationPlots:
         ax.set_xlabel("Time (minutes)")
         ax.set_ylabel("Mean waiting time (minutes)")
         ax.grid(True, linestyle="--", alpha=0.7)
-        # ax.legend()
         return fig, ax
 
     @staticmethod
@@ -65,7 +62,6 @@ class SimulationPlots:
         ax.set_xlabel("Time (minutes)")
         ax.set_ylabel("Mean utilization rate")
         ax.grid(True, linestyle="--", alpha=0.7)
-        # ax.legend()
         ax.set_ylim(0, 1)
         return fig, ax
 
@@ -73,16 +69,6 @@ class SimulationPlots:
     def plot_all_metrics(
         scenarios: dict[int, dict],
     ) -> None:
-
-        # planes_unloaded_hourly_scenarios = {}
-        # mean_queue_length_scenarios = {}
-        # mean_waiting_time_scenarios = {}
-        # mean_robot_utilization_hourly_scenarios = {}
-        # for robots_count, hourly_statistics in scenarios.items():
-        #     planes_unloaded_hourly_scenarios[robots_count] = hourly_statistics["planes_unloaded_hourly"]
-        #     mean_queue_length_scenarios[robots_count] = hourly_statistics["planes_queue_lenght_over_time"]
-        #     mean_waiting_time_scenarios[robots_count] = hourly_statistics["mean_queue_time_over_time"]
-        #     mean_robot_utilization_hourly_scenarios[robots_count] = hourly_statistics["cumulative_robots_activity_ratio"]
 
         for robots_count in scenarios.keys():
 
@@ -110,7 +96,6 @@ class SimulationPlots:
                 ax_dst.set_ylabel(ax_src.get_ylabel())
 
                 ax_dst.grid(True, linestyle="--", alpha=0.7)
-                # ax_dst.legend()
 
                 if ax_src == ax_utilization:
                     ax_dst.set_ylim(0, 1)

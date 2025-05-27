@@ -3,6 +3,7 @@ from config.simulation_config import SimulationConfig
 from config.logger import setup_logger
 from models.airport import Airport
 from visualization.plots import SimulationPlots
+from visualization.tables import SimulationTable
 
 
 class Simulation:
@@ -11,17 +12,18 @@ class Simulation:
         self.config: SimulationConfig = SimulationConfig()
         self.logger: Logger = setup_logger()
 
-    def run_scenarios(self) -> None:
+    def run_scenarios(self, generate_plots: bool = True, generate_table: bool = True) -> None:
         scenarios_statistics: dict = {}
-        for robots_count in self.config.ROBOTs_MEAN_UNLOADING_TIMES.keys():
-            scenarios_statistics[robots_count] = self._run_scenario(
-                robots_count, print_final_statistic=False, print_timely_statistics=False
+        for robots_count in self.config.ROBOTS_MEAN_UNLOADING_TIMES.keys():
+            scenarios_statistics[robots_count] = self.run_scenario(
+                robots_count, print_final_statistic=True, print_timely_statistics=False
             )
-        SimulationPlots.plot_all_metrics(scenarios=scenarios_statistics)
+        if generate_table:
+            print(SimulationTable.generate_table())
+        if generate_plots:
+            SimulationPlots.plot_all_metrics(scenarios=scenarios_statistics)
 
-    def _run_scenario(
-        self, robots_count: int, print_final_statistic: bool = False, print_timely_statistics: bool = False
-    ) -> dict:
+    def run_scenario(self, robots_count: int, print_final_statistic: bool = False, print_timely_statistics: bool = False) -> dict:
         airport: Airport = Airport(self.config, robots_count)
         airport.manage_operations()
 
@@ -33,10 +35,6 @@ class Simulation:
             self._log_timely_statistics(hourly_statistics)
 
         return airport.get_time_performance_statistics()
-
-    def _generate_timely_statistics_plots(self, hourly_statistics_per_scenario: dict) -> None:
-        """Need a dict[robots_count, hourly_statistics_dict] as input"""
-        pass
 
     def _log_simulation_results(self, simulation_results: dict, robots_count: int) -> None:
         simulation_time: int = simulation_results["simulation_time"]

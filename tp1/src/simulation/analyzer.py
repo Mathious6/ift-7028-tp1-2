@@ -10,7 +10,7 @@ logger = setup_logger("analyzer")
 
 
 class SimulationAnalyzer:
-    def __init__(self, num_replications: int = 30, warmup_period: int = 10000):
+    def __init__(self, num_replications: int = 30, warmup_period: int = 12500):
         """Initialize the simulation analyzer."""
         self.num_replications = num_replications
         self.warmup_period = warmup_period
