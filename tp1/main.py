@@ -7,7 +7,7 @@ from config.logger import setup_logger
 import time
 
 RUN_ANALYSER = False
-RUN_VISUALIZATION = False
+RUN_VISUALIZATION = True
 RUN_EXPERIMENTS = True
 SIMULATION_DURATION = 40000
 WINDOW_SIZE = 60
@@ -53,7 +53,13 @@ def main():
 
             scenarios[num_robots] = airport.planes
 
-        SimulationPlots.plot_all_metrics(scenarios, SIMULATION_DURATION, WINDOW_SIZE)
+        SimulationPlots.plot_all_metrics(
+            scenarios,
+            SIMULATION_DURATION,
+            WINDOW_SIZE,
+            scenario_label="robots",
+            output_filename="robot_scenarios_metrics.png"
+        )
 
     if RUN_EXPERIMENTS:
         root_logger.info("Running experiments...")
@@ -68,7 +74,13 @@ def main():
 
             scenarios[mean_arrival_time] = airport.planes
 
-        SimulationPlots.plot_all_metrics(scenarios, SIMULATION_DURATION, WINDOW_SIZE)
+        SimulationPlots.plot_all_metrics(
+            scenarios,
+            SIMULATION_DURATION,
+            WINDOW_SIZE,
+            scenario_label="minutes",
+            output_filename="arrival_time_scenarios_metrics.png"
+        )
 
 
 if __name__ == "__main__":
