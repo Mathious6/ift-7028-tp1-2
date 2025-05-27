@@ -12,15 +12,15 @@ logger = setup_logger("airport")
 class Airport:
     """Represents the airport system with its planes, robots, and queue."""
 
-    def __init__(self, num_robots: int):
-        self.config = SimulationConfig(num_robots)
+    def __init__(self, num_robots: int, mean_arrival_time: float = SimulationConfig.MEAN_ARRIVAL_TIME):
+        self.config = SimulationConfig(num_robots, mean_arrival_time)
 
         self.planes: List[AirPlane] = []  # planes in the system
         self.queue: List[AirPlane] = []  # planes waiting to be served
         self.current_plane: Optional[AirPlane] = None  # plane being served
 
         # We use a fixed seed for the random number generator to ensure reproducibility
-        self.inter_arrival_time = ExponentialDistribution(mean=self.config.MEAN_ARRIVAL_TIME, seed=self.config.RANDOM_SEED)
+        self.inter_arrival_time = ExponentialDistribution(mean=self.config.mean_arrival_time, seed=self.config.RANDOM_SEED)
         self.processing_time = ExponentialDistribution(mean=self.config.ROBOT_SCENARIOS[num_robots], seed=self.config.RANDOM_SEED)
 
         self.simulator = Simulator()

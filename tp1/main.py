@@ -6,7 +6,9 @@ from src.simulation.analyzer import SimulationAnalyzer
 from config.logger import setup_logger
 import time
 
-RUN_VISUALIZATION = True
+RUN_ANALYSER = False
+RUN_VISUALIZATION = False
+RUN_EXPERIMENTS = True
 SIMULATION_DURATION = 40000
 WINDOW_SIZE = 60
 NUM_REPLICATIONS = 50
@@ -21,9 +23,10 @@ def main():
     root_logger.info(f"Simulation duration: {SIMULATION_DURATION} minutes")
     root_logger.info(f"Warmup period: {WARMUP_PERIOD} minutes")
 
-    analyzer = SimulationAnalyzer(num_replications=NUM_REPLICATIONS, warmup_period=WARMUP_PERIOD)
-    results = analyzer.analyze_all_scenarios(SIMULATION_DURATION)
-    analyzer.print_results_table(results)
+    if RUN_ANALYSER:
+        analyzer = SimulationAnalyzer(num_replications=NUM_REPLICATIONS, warmup_period=WARMUP_PERIOD)
+        results = analyzer.analyze_all_scenarios(SIMULATION_DURATION)
+        analyzer.print_results_table(results)
 
     if RUN_VISUALIZATION:
         root_logger.info("Running single simulation for visualization...")
@@ -49,6 +52,21 @@ def main():
             root_logger.info(f"Scenario execution time: {time.time() - start_time:.2f} seconds")
 
             scenarios[num_robots] = airport.planes
+
+        SimulationPlots.plot_all_metrics(scenarios, SIMULATION_DURATION, WINDOW_SIZE)
+
+    if RUN_EXPERIMENTS:
+        root_logger.info("Running experiments...")
+        mean_arrival_times = [12.5, 10, 8, 5, 4, 3]
+        scenarios = {}
+        for mean_arrival_time in mean_arrival_times:
+            root_logger.info(f"Running experiment with mean arrival time: {mean_arrival_time} minutes")
+            start_time = time.time()
+
+            airport = Airport(num_robots=12, mean_arrival_time=mean_arrival_time)
+            airport.run_simulation(SIMULATION_DURATION)
+
+            scenarios[mean_arrival_time] = airport.planes
 
         SimulationPlots.plot_all_metrics(scenarios, SIMULATION_DURATION, WINDOW_SIZE)
 

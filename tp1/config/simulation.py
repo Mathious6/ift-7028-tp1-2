@@ -17,6 +17,7 @@ class SimulationConfig:
         12: 4.2,
     }
 
-    def __init__(self, num_robots: int):
+    def __init__(self, num_robots: int, mean_arrival_time: float = MEAN_ARRIVAL_TIME):
         self.num_robots = num_robots
         self.robot_processing_time = self.ROBOT_SCENARIOS[num_robots]
+        self.mean_arrival_time = mean_arrival_time
